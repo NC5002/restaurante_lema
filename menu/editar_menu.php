@@ -14,15 +14,29 @@ $categorias = $menu->leerCategorias();
 if($_POST){
     $menu->NOMBRE = $_POST['NOMBRE'];
     $menu->DESCRIPCION = $_POST['DESCRIPCION'];
+    $menu->MEDIDA = $_POST['MEDIDA'];
     $menu->PRECIO = $_POST['PRECIO'];
     $menu->NUMERO_CATEGORIA = $_POST['NUMERO_CATEGORIA'];
     $menu->ESTADO = $_POST['ESTADO'];
     
     if(!empty($_FILES['IMAGEN']['name'])) {
-        $menu->IMAGEN = $_FILES['IMAGEN']['name'];
-        $target_dir = "uploads/";
-        $target_file = $target_dir . basename($_FILES["IMAGEN"]["name"]);
-        move_uploaded_file($_FILES["IMAGEN"]["tmp_name"], $target_file);
+        // Configuración de imagen
+        $target_dir = "../includes/img/";
+        $extension = pathinfo($_FILES["IMAGEN"]["name"], PATHINFO_EXTENSION);
+        $nombre_archivo = uniqid() . '.' . $extension;
+        $target_file = $target_dir . $nombre_archivo;
+        
+        // Validar y mover archivo
+        if(move_uploaded_file($_FILES["IMAGEN"]["tmp_name"], $target_file)) {
+            // Eliminar la imagen anterior si existe
+            if(!empty($menu->IMAGEN)) {
+                $old_file = $target_dir . $menu->IMAGEN;
+                if(file_exists($old_file)) {
+                    unlink($old_file);
+                }
+            }
+            $menu->IMAGEN = $nombre_archivo;
+        }
     }
     
     if($menu->actualizar()){
@@ -87,26 +101,24 @@ include '../includes/header.php';
 
                             <div class="col-6 form-floating mb-3">
                                 <select class="form-select" id="MEDIDA" name="MEDIDA" required>
-                                    <option value="<?= htmlspecialchars($menu->MEDIDA) ?>"><?= htmlspecialchars($menu->MEDIDA) ?></option>
                                     <?php                               
                                     try {
-                                        // Consulta para obtener las medidas
                                         $query = "SELECT ID_MEDIDA, DESCRIPCION FROM medidas ORDER BY ID_MEDIDA ASC";
                                         $stmt = $db->prepare($query);
                                         $stmt->execute();
                                         $medidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         
-                                        // Generar opciones
                                         foreach ($medidas as $medida) {
-                                            echo '<option value="' . htmlspecialchars($medida['ID_MEDIDA']) . '">'
-                                                .  htmlspecialchars($medida['ID_MEDIDA']) ." - ".htmlspecialchars($medida['DESCRIPCION']) . '</option>';
+                                            $selected = ($medida['ID_MEDIDA'] == $menu->MEDIDA) ? 'selected' : '';
+                                            echo '<option value="' . htmlspecialchars($medida['ID_MEDIDA']) . '" ' . $selected . '>'
+                                                . htmlspecialchars($medida['ID_MEDIDA']) . " - " . htmlspecialchars($medida['DESCRIPCION']) . '</option>';
                                         }
                                     } catch(PDOException $e) {
                                         echo '<option value="" disabled>Error cargando medidas</option>';
                                     }
                                     ?>
                                 </select>
-                                <label for="MEDIDA" class="form-label">Medida</label> <!-- Corregí el for para que coincida con el ID -->
+                                <label for="MEDIDA" class="form-label">Medida</label>
                             </div>
 
                             <div class="col-md-4 form-floating">
@@ -129,7 +141,7 @@ include '../includes/header.php';
                                     <label for="IMAGEN" class="form-label">Imagen</label>
                                 </div>
                                 <div class="col-md-6 d-flex justify-content-center">
-                                    <img src='../includes/img/<?php echo htmlspecialchars($menu->IMAGEN)?>.png' class="img-thumbnail img-fluid align-self-center">       
+                                    <img src='../includes/img/<?php echo htmlspecialchars($menu->IMAGEN)?>' class="img-thumbnail img-fluid align-self-center">       
                                 </div>    
                             </div>
                             <div class="col-12 mt-4">

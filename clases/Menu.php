@@ -2,7 +2,6 @@
 class Menu {
     private $conn;
     private $table_name = "menu";
-
     public $CODIGO_MENU;
     public $NOMBRE;
     public $DESCRIPCION;
@@ -46,14 +45,14 @@ class Menu {
 
     function leer() {
         // Consulta modificada para mostrar solo los datos del menú
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY NOMBRE";
+        $query = "SELECT * FROM " . $this->table_name;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
     function leerUno() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE CODIGO_MENU = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE CODIGO_MENU = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->CODIGO_MENU);
         $stmt->execute();
@@ -71,9 +70,9 @@ class Menu {
 
     function actualizar() {
         $query = "UPDATE " . $this->table_name . " 
-                  SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, MEDIDA=:MEDIDA, PRECIO=:PRECIO, 
-                      NUMERO_CATEGORIA=:NUMERO_CATEGORIA, ESTADO=:ESTADO, IMAGEN=:IMAGEN
-                  WHERE CODIGO_MENU=:CODIGO_MENU";
+        SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, MEDIDA=:MEDIDA, PRECIO=:PRECIO, 
+            NUMERO_CATEGORIA=:NUMERO_CATEGORIA, ESTADO=:ESTADO, IMAGEN=:IMAGEN
+        WHERE CODIGO_MENU=:CODIGO_MENU";
         
         $stmt = $this->conn->prepare($query);
         

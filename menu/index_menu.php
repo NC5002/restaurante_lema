@@ -37,31 +37,30 @@ include '../includes/header.php';
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): 
+                            <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): 
                                     $nombre_categoria = $menu->obtenerNombreCategoria($row['NUMERO_CATEGORIA']);
+                                    // Cambiar $stmt por $stmt_medida
+                                    try {                                                  
+                                        $query = "SELECT DESCRIPCION FROM medidas WHERE ID_MEDIDA = ?";
+                                        $stmt_medida = $db->prepare($query);
+                                        $stmt_medida->execute([$row['MEDIDA']]);
+                                        $medida = $stmt_medida->fetch(PDO::FETCH_ASSOC);                                                    
+                                        $descripcion_medida = htmlspecialchars($medida['DESCRIPCION'] ?? 'Desconocido');
+                                    } catch(PDOException $e) {
+                                        $descripcion_medida = 'Error';
+                                    }
                                 ?>
                                     <tr>
                                         <td>
                                             <?php if($row['IMAGEN']): ?>
-                                                <img src="../includes/img/<?= htmlspecialchars($row['IMAGEN'])?>.png" alt="<?= htmlspecialchars($row['NOMBRE']) ?>" class="img-fluid" width="50px">
+                                                <img src="../includes/img/<?= htmlspecialchars($row['IMAGEN'])?>" alt="<?= htmlspecialchars($row['NOMBRE']) ?>" class="img-fluid" width="50px">
                                             <?php else: ?>
                                                 <i class="bi bi-image" style="font-size: 2rem;"></i>
                                             <?php endif; ?>
                                         </td>
                                         <td><?= htmlspecialchars($row['NOMBRE']) ?></td>
                                         <td><?= htmlspecialchars($row['DESCRIPCION']) ?></td>
-                                        <td>
-                                            <?php
-                                                try {                                                  
-                                                    $query = "SELECT DESCRIPCION FROM medidas WHERE ID_MEDIDA = ?";
-                                                    $stmt = $db->prepare($query);
-                                                    $stmt->execute([$row['MEDIDA']]);
-                                                    $medida = $stmt->fetch(PDO::FETCH_ASSOC);                                                    
-                                                    echo htmlspecialchars($medida['DESCRIPCION'] ?? 'Desconocido');
-                                                } catch(PDOException $e) {
-                                                    echo 'Error';
-                                                }
-                                            ?>
+                                        <td><?= $descripcion_medida ?></td>
                                             </td>
                                         <td><?= htmlspecialchars($nombre_categoria) ?></td>
                                         <td>$<?= number_format($row['PRECIO'], 2) ?></td>

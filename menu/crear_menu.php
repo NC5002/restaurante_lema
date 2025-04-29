@@ -53,30 +53,26 @@ if($_POST){
         $menu->MEDIDA = $_POST['MEDIDA'];
         $menu->IMAGEN = $nombre_archivo;
 
+        // SOLO UNA LLAMADA A crear()
         if($menu->crear()){
-            echo '<div class="alert alert-success">Ítem creado exitosamente</div>';
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> Ítem de menú creado exitosamente.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>';
         } else{
             unlink($target_file); // Eliminar imagen si falla la BD
-            throw new Exception("Error al guardar en base de datos");
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> No se pudo crear el ítem de menú.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>';
         }
-        
-    } catch (Exception $e) {
-        echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
-    }
 
-    
-    if($menu->crear()){
-        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle-fill"></i> Ítem de menú creado exitosamente.
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-              </div>';
-    } else{
+        } catch (Exception $e) {
         echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> No se pudo crear el ítem de menú.
+                <i class="bi bi-exclamation-triangle-fill"></i> ' . $e->getMessage() . '
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-              </div>';
-    }
-
+            </div>';
+        }
 }
 include '../includes/head.php'; // Include header file for Bootstrap and other styles
 include '../includes/header.php';
