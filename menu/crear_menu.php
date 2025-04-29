@@ -1,12 +1,23 @@
 <?php
-include '../conexion.php'; 
-include '../Menu.php';
+include '../includes/conexion.php'; 
+include '../clases/Menu.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
+$pdo = $database->obtenerConexion();
 
 $menu = new Menu($db);
 $categorias = $menu->leerCategorias();
+
+// Consulta para obtener las categorías activas
+try {
+    $sql = "SELECT ID_CATEGORIA, NOMBRE FROM categoria WHERE ESTADO = 1 ORDER BY NOMBRE ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error al obtener categorías: " . $e->getMessage());
+}
 
 if($_POST){
     $menu->NOMBRE = $_POST['NOMBRE'];
@@ -31,6 +42,7 @@ if($_POST){
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
               </div>';
     }
+
 }
 include '../includes/head.php'; // Include header file for Bootstrap and other styles
 include '../includes/header.php';
@@ -40,46 +52,49 @@ include '../includes/header.php';
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"><i class="bi bi-journal-plus"></i> Nuevo Ítem de Menú</h3>
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-journal-plus"></i>Nuevo Ítem de Menú</h3>
                 </div>
                 <div class="card-body">
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="NOMBRE" class="form-label"><i class="bi bi-card-heading"></i> Nombre</label>
-                                <input type="text" class="form-control" id="NOMBRE" name="NOMBRE" required>
+                            <div class="col-md-6 form-floating mb-3">                            
+                               
+                                <input type="text" class="form-control" id="NOMBRE" name="NOMBRE" placeholder="nombres"  required>
+                                <label for="NOMBRE" class="form-label"> Nombre</label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="NUMERO_CATEGORIA" class="form-label"><i class="bi bi-bookmark"></i> Categoría</label>
-                                <select class="form-select" id="NUMERO_CATEGORIA" name="NUMERO_CATEGORIA" required>
+                            <div class="col-md-6 form-floating mb-3">
+                                <select class="form-select" id="ID_CATEGORIA" name="ID_CATEGORIA" placeholder="categorias" required>
                                     <option value="">Seleccione una categoría</option>
-                                    <?php while ($categoria = $categorias->fetch(PDO::FETCH_ASSOC)): ?>
-                                        <option value="<?= $categoria['NUMERO_CATEGORIA'] ?>"><?= $categoria['NOMBRE'] ?></option>
-                                    <?php endwhile; ?>
+                                    <?php foreach ($categorias as $categoria): ?>
+                                        <option value="<?= htmlspecialchars($categoria['ID_CATEGORIA']) ?>">
+                                            <?= htmlspecialchars($categoria['NOMBRE']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
+                                <label for="ID_CATEGORIA" class="form-label">Categoría
+                                </label>
                             </div>
-                            <div class="col-12">
-                                <label for="DESCRIPCION" class="form-label"><i class="bi bi-text-paragraph"></i> Descripción</label>
-                                <textarea class="form-control" id="DESCRIPCION" name="DESCRIPCION" rows="3"></textarea>
+                            <div class="col-12 form-floating mb-3">
+                                
+                                <textarea class="form-control" id="DESCRIPCION" name="DESCRIPCION" placeholder="descripcion" rows="3"></textarea>
+                                <label for="DESCRIPCION" class="form-label">Descripción</label>
                             </div>
-                            <div class="col-md-4">
-                                <label for="PRECIO" class="form-label"><i class="bi bi-currency-dollar"></i> Precio</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" id="PRECIO" name="PRECIO" step="0.01" min="0" required>
-                                </div>
+                            <div class="col-md-4 form-floating mb-3">
+                                
+                                    <input type="number" class="form-control" id="PRECIO" name="PRECIO" step="0.01" min="0" required placeholder="precio">
+                                <label for="PRECIO" class="form-label">Precio</label>
                             </div>
-                            <div class="col-md-8">
-                                <label for="IMAGEN" class="form-label"><i class="bi bi-image"></i> Imagen</label>
+                            <div class="col-md-8 mb-3">
+                                
                                 <input class="form-control" type="file" id="IMAGEN" name="IMAGEN" accept="image/*">
                             </div>
                             <div class="col-12 mt-4">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="submit" class="btn btn-primary me-md-2">
+                                    <button type="submit" class="btn btn-primario me-md-2">
                                         <i class="bi bi-save"></i> Guardar
                                     </button>
-                                    <a href="index_menu.php" class="btn btn-outline-secondary">
+                                    <a href="./index_menu.php" class="btn btn-secundario">
                                         <i class="bi bi-arrow-left"></i> Volver
                                     </a>
                                 </div>

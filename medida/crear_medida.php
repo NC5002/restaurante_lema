@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Medida.php';
+include '../includes/conexion.php'; 
+include '../clases/Medida.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
@@ -26,18 +26,19 @@ include '../includes/header.php';
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h2 class="mb-0"><i class="bi bi-plus-circle"></i> Crear Nueva Medida</h2>
+                    <div class="card-header bg-dark text-white">
+                        <h2 class="mb-0 color-primario"><i class="bi bi-plus-circle"></i> Crear Nueva Medida</h2>
                     </div>
                     <div class="card-body">
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                            <div class="mb-3">
-                                <label for="DESCRIPCION" class="form-label"><i class="bi bi-tag"></i> Descripción</label>
-                                <input type="text" class="form-control" id="DESCRIPCION" name="DESCRIPCION" required>
+                            <div class="mb-3 form-floating">
+                                
+                                <input type="text" class="form-control" id="DESCRIPCION" name="DESCRIPCION" required placeholder="descripcion">
+                                <label for="DESCRIPCION" class="form-label">Descripción</label>
                             </div>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button type="submit" class="btn btn-primary me-md-2"><i class="bi bi-save"></i> Guardar</button>
-                                <a href="index_medida.php" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+                                <button type="submit" class="btn btn-primario me-md-2"><i class="bi bi-save"></i> Guardar</button>
+                                <a href="index_medida.php" class="btn btn-secundario"><i class="bi bi-arrow-left"></i> Volver</a>
                             </div>
                         </form>
                     </div>

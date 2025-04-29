@@ -75,5 +75,17 @@ class Categoria {
         }
         return false;
     }
+
+    function activar() {
+        $query = "UPDATE " . $this->table_name . " SET ESTADO='1' WHERE ID_CATEGORIA=:ID_CATEGORIA";
+        $stmt = $this->conn->prepare($query);
+        $this->ID_CATEGORIA = htmlspecialchars(strip_tags($this->ID_CATEGORIA));
+        $stmt->bindParam(":ID_CATEGORIA", $this->ID_CATEGORIA);
+        
+        if($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
 }
 ?>

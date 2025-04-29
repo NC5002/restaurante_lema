@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Inventario.php';
+include '../includes/conexion.php'; 
+include '../clases/Inventario.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
@@ -40,21 +40,46 @@ include '../includes/header.php';
                 <div class="card-body">
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="CODIGO_MENU" class="form-label"><i class="bi bi-upc-scan"></i> Código Menú</label>
-                                <input type="text" class="form-control" id="CODIGO_MENU" name="CODIGO_MENU" required>
+                            <div class="col-md-6 form-floating">
+                            <select class="form-select" id="CODIGO_MENU" name="CODIGO_MENU" required>
+                                <option value="">Seleccione un menú</option>
+                                <?php
+                                // Obtener conexión
+                                $database = new Conexion();
+                                $db = $database->obtenerConexion();
+                                
+                                try {
+                                    $query = "SELECT CODIGO_MENU, NOMBRE FROM menu WHERE ESTADO = 1 ORDER BY NOMBRE ASC";
+                                    $stmt = $db->prepare($query);
+                                    $stmt->execute();
+                                    $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    
+                                    foreach ($menus as $menu) {
+                                        echo '<option value="'.htmlspecialchars($menu['CODIGO_MENU']).'">'
+                                            .htmlspecialchars($menu['NOMBRE']).'</option>';
+                                    }
+                                    
+                                } catch(PDOException $e) {
+                                    echo '<option value="" disabled>Error cargando menús</option>';
+                                }
+                                ?>
+                            </select>
+                            <label for="CODIGO_MENU" class="form-label">Menú</label>
+                        </div>
+                            <div class="col-md-6 form-floating">
+                            <input type="text" class="form-control" id="NOMBRE_INGREDIENTE" name="NOMBRE_INGREDIENTE" required placeholder="ingrediente">
+                                <label for="NOMBRE_INGREDIENTE" class="form-label">Nombre del Ingrediente</label>
+                                
                             </div>
-                            <div class="col-md-6">
-                                <label for="NOMBRE_INGREDIENTE" class="form-label"><i class="bi bi-basket"></i> Nombre del Ingrediente</label>
-                                <input type="text" class="form-control" id="NOMBRE_INGREDIENTE" name="NOMBRE_INGREDIENTE" required>
+                            <div class="col-md-6 form-floating">
+                            <input type="number" class="form-control" id="CANTIDAD" name="CANTIDAD" required placeholder="cantidad">
+                                <label for="CANTIDAD" class="form-label">Cantidad</label>
+                                
                             </div>
-                            <div class="col-md-6">
-                                <label for="CANTIDAD" class="form-label"><i class="bi bi-123"></i> Cantidad</label>
-                                <input type="number" class="form-control" id="CANTIDAD" name="CANTIDAD" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="ID_USUARIO" class="form-label"><i class="bi bi-person"></i> ID Usuario</label>
-                                <input type="text" class="form-control" id="ID_USUARIO" name="ID_USUARIO" required>
+                            <div class="col-md-6 form-floating">
+                            <input type="text" class="form-control" id="ID_USUARIO" name="ID_USUARIO" required placeholder="id">
+                                <label for="ID_USUARIO" class="form-label">ID Usuario</label>
+                                
                             </div>
                             <div class="col-12 mt-4">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">

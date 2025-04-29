@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Medida.php';
+include '../includes/conexion.php'; 
+include '../clases/Medida.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
@@ -16,13 +16,13 @@ include '../includes/header.php';
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                        <h2 class="mb-0"><i class="bi bi-list-ul"></i> Listado de Medidas</h2>
-                        <a href="crear_medida.php" class="btn btn-light"><i class="bi bi-plus-circle"></i> Nueva Medida</a>
+                    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0 color-primario"><i class="bi bi-list-ul"></i> Listado de Medidas</h2>
+                        <a href="crear_medida.php" class="btn btn-primario"><i class="bi bi-plus-circle"></i> Nueva Medida</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover table-light">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -36,8 +36,8 @@ include '../includes/header.php';
                                             <td><?php echo htmlspecialchars($row['ID_MEDIDA']); ?></td>
                                             <td><?php echo htmlspecialchars($row['DESCRIPCION']); ?></td>
                                             <td>
-                                                <a href="editar_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
-                                                <a href="eliminar_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de eliminar esta medida?')"><i class="bi bi-trash"></i></a>
+                                                <a href="editar_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-primario me-1"><i class="bi bi-pencil"></i></a>
+                                                <a href="eliminar_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-terciario" onclick="return confirm('¿Estás seguro de eliminar esta medida?')"><i class="bi bi-trash"></i></a>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>

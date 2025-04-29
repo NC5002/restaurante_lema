@@ -1,0 +1,63 @@
+/* Definir variables en el selector :root */
+:root {
+    --color-primario: #3498db;
+    --color-primario-light: #97c1dd;
+    --color-secundario: #7f8c8d;
+    --color-terciario: #ff6200;
+}
+
+body {
+    font-family: Arial, sans-serif, Helvetica, sans-serif, Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.color-primario {
+    color: var(--color-primario);
+}
+.color-secundario {
+    color: var(--color-secundario);
+}
+
+.btn-primario {
+    background-color: var(--color-primario);
+    color: white;
+    border-color: #3498db;
+}
+.btn-primario:hover {
+    background-color: white;
+    border-color: #2980b9;
+    color: var(--color-primario);
+}
+
+.btn-secundario {
+    background-color: var(--color-secundario);
+    color: white;
+    border-color: #7f8c8d;
+}
+.btn-secundario:hover {
+    background-color: white;
+    border-color: #7f8c8d;
+    color: var(--color-secundario);
+}
+
+.btn-terciario {
+    background-color: var(--color-terciario);
+    color: white;
+    border-color: #7f8c8d;
+}
+.btn-terciario:hover {
+    background-color: white;
+    border-color: var(--color-terciario);
+    color: var(--color-terciario);
+}
+  
+.link-primario {
+    color: var(--color-primario);
+    text-decoration: none;
+}
+
+.link-primario:hover {
+    color: var(--color-secundario);
+}
+

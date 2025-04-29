@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Menu.php';
+include '../includes/conexion.php'; 
+include '../clases/Menu.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();

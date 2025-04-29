@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Cliente.php';
+include '../includes/conexion.php'; 
+include '../clases/Cliente.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
@@ -17,12 +17,12 @@ include '../includes/header.php';
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="bi bi-person-lines-fill"></i> Detalles del Cliente</h3>
+                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-person-lines-fill"></i> Detalles del Cliente</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>
@@ -58,32 +58,13 @@ include '../includes/header.php';
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header bg-light">
-                                    <h5 class="mb-0"><i class="bi bi-gear"></i> Acciones</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="d-grid gap-2">
-                                        <a href="editar_cliente.php?ID_CLIENTE=<?= $cliente->ID_CLIENTE ?>" 
-                                           class="btn btn-outline-primary btn-block mb-2">
-                                           <i class="bi bi-pencil"></i> Editar Cliente
-                                        </a>
-                                        <!--a href="eliminar_cliente.php?ID_CLIENTE=<?= $cliente->ID_CLIENTE ?>" 
-                                           class="btn btn-outline-danger btn-block mb-2"
-                                           onclick="return confirm('¿Está seguro de eliminar este cliente?')">
-                                           <i class="bi bi-trash"></i> Eliminar Cliente
-                                        </a-->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="card-footer bg-light">
                     <div class="d-flex justify-content-between">
                         <small class="text-muted">ID: <?= $cliente->ID_CLIENTE ?></small>
-                        <a href="index_cliente.php" class="btn btn-light">
+                        <a href="./index_cliente.php" class="btn btn-primario">
                             <i class="bi bi-arrow-left"></i> Volver al Listado
                         </a>
                     </div>

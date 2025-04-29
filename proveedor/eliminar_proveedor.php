@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Proveedor.php';
+include '../includes/conexion.php'; 
+include '../clases/Proveedor.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();

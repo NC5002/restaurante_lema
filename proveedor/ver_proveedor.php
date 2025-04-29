@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Proveedor.php';
+include '../includes/conexion.php'; 
+include '../clases/Proveedor.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
@@ -17,12 +17,12 @@ include '../includes/header.php';
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="bi bi-truck"></i> Detalles del Proveedor</h3>
+                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-truck"></i> Detalles del Proveedor</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>
@@ -58,27 +58,13 @@ include '../includes/header.php';
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header bg-light">
-                                    <h5 class="mb-0"><i class="bi bi-gear"></i> Acciones</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="d-grid gap-2">
-                                        <a href="editar_proveedor.php?ID_PROVEEDOR=<?= $proveedor->ID_PROVEEDOR ?>" 
-                                           class="btn btn-outline-primary btn-block mb-2">
-                                           <i class="bi bi-pencil"></i> Editar Proveedor
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="card-footer bg-light">
                     <div class="d-flex justify-content-between">
                         <small class="text-muted">ID: <?= $proveedor->ID_PROVEEDOR ?></small>
-                        <a href="index_proveedor.php" class="btn btn-light">
+                              <a href="./index_proveedor.php" class="btn btn-primario">
                             <i class="bi bi-arrow-left"></i> Volver al Listado
                         </a>
                     </div>

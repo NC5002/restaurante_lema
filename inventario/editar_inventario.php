@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Inventario.php';
+include '../includes/conexion.php'; 
+include '../clases/Inventario.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
@@ -38,43 +38,70 @@ include '../includes/header.php';
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"><i class="bi bi-box-seam"></i> Editar Inventario</h3>
+                <div class="card-header bg-dark">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-box-seam"></i> Editar Inventario</h3>
                 </div>
                 <div class="card-body">
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?ID_INVENTARIO={$inventario->ID_INVENTARIO}"); ?>" method="post">
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="CODIGO_MENU" class="form-label"><i class="bi bi-upc-scan"></i> Código Menú</label>
-                                <input type="text" class="form-control" id="CODIGO_MENU" name="CODIGO_MENU" 
-                                       value="<?= htmlspecialchars($inventario->CODIGO_MENU) ?>" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="NOMBRE_INGREDIENTE" class="form-label"><i class="bi bi-basket"></i> Nombre del Ingrediente</label>
+
+                        <div class="col-md-6 form-floating">
+                            <select class="form-select" id="CODIGO_MENU" name="CODIGO_MENU" required>
+                                <option value="<?= htmlspecialchars($inventario->CODIGO_MENU) ?>"><?= htmlspecialchars($inventario->CODIGO_MENU) ?></option>
+                                <?php
+                                // Obtener conexión
+                                $database = new Conexion();
+                                $db = $database->obtenerConexion();
+                                
+                                try {
+                                    $query = "SELECT CODIGO_MENU, NOMBRE FROM menu WHERE ESTADO = 1 ORDER BY NOMBRE ASC";
+                                    $stmt = $db->prepare($query);
+                                    $stmt->execute();
+                                    $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    
+                                    foreach ($menus as $menu) {
+                                        echo '<option value="'.htmlspecialchars($menu['CODIGO_MENU']).'">'
+                                            .htmlspecialchars($menu['NOMBRE']).'</option>';
+                                    }
+                                    
+                                } catch(PDOException $e) {
+                                    echo '<option value="" disabled>Error cargando menús</option>';
+                                }
+                                ?>
+                            </select>
+                            <label for="CODIGO_MENU" class="form-label">Codigo del Menú</label>
+                        </div>
+
+                            <div class="col-md-6 form-floating">
+                                
                                 <input type="text" class="form-control" id="NOMBRE_INGREDIENTE" name="NOMBRE_INGREDIENTE" 
-                                       value="<?= htmlspecialchars($inventario->NOMBRE_INGREDIENTE) ?>" required>
+                                       value="<?= htmlspecialchars($inventario->NOMBRE_INGREDIENTE) ?>" required  placeholder="ingrediente">
+                                       <label for="NOMBRE_INGREDIENTE" class="form-label">Nombre del Ingrediente</label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="CANTIDAD" class="form-label"><i class="bi bi-123"></i> Cantidad</label>
+                            <div class="col-md-6 form-floating">
+                                
                                 <input type="number" class="form-control" id="CANTIDAD" name="CANTIDAD" 
-                                       value="<?= htmlspecialchars($inventario->CANTIDAD) ?>" required>
+                                       value="<?= htmlspecialchars($inventario->CANTIDAD) ?>" required  placeholder="cantidad">
+                                       <label for="CANTIDAD" class="form-label">Cantidad</label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="ID_USUARIO" class="form-label"><i class="bi bi-person"></i> ID Usuario</label>
+                            <div class="col-md-6 form-floating">
+                                
                                 <input type="text" class="form-control" id="ID_USUARIO" name="ID_USUARIO" 
-                                       value="<?= htmlspecialchars($inventario->ID_USUARIO) ?>" required>
+                                       value="<?= htmlspecialchars($inventario->ID_USUARIO) ?>" required placeholder="id" readonly>
+                                       <label for="ID_USUARIO" class="form-label">ID Usuario</label>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><i class="bi bi-calendar"></i> Fecha de Registro</label>
+                            <div class="col-md-6 form-floating">
+                                
                                 <input type="text" class="form-control" 
-                                       value="<?= date('d/m/Y', strtotime($inventario->FECHA_REGISTRO)) ?>" readonly>
+                                       value="<?= date('d/m/Y', strtotime($inventario->FECHA_REGISTRO)) ?>" readonly placeholder="fecha">
+                                       <label class="form-label">Fecha de Registro</label>
                             </div>
                             <div class="col-12 mt-4">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="submit" class="btn btn-primary me-md-2">
+                                    <button type="submit" class="btn btn-primario me-md-2">
                                         <i class="bi bi-save"></i> Guardar Cambios
                                     </button>
-                                    <a href="index_inventario.php" class="btn btn-outline-secondary">
+                                    <a href="index_inventario.php" class="btn btn-secundario">
                                         <i class="bi bi-arrow-left"></i> Volver al Listado
                                     </a>
                                 </div>

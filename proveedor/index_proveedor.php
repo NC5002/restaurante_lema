@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Proveedor.php';
+include '../includes/conexion.php'; 
+include '../clases/Proveedor.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
@@ -15,16 +15,16 @@ include '../includes/header.php';
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="bi bi-truck"></i> Listado de Proveedores</h3>
-                    <a href="crear_proveedor.php" class="btn btn-light">
+                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-truck"></i> Listado de Proveedores</h3>
+                    <a href="crear_proveedor.php" class="btn btn-primario">
                         <i class="bi bi-plus-circle"></i> Nuevo Proveedor
                     </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered">
-                            <thead class="table-primary">
+                        <table class="table table-striped table-hover table-light">
+                            <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>RUC/Cédula</th>
@@ -44,19 +44,20 @@ include '../includes/header.php';
                                         <td><?= date('d/m/Y', strtotime($row['FECHA_REGISTRO'])) ?></td>
                                         <td>
                                             <div class="btn-group" role="group">
+                                            <a href="ver_proveedor.php?ID_PROVEEDOR=<?= $row['ID_PROVEEDOR'] ?>" 
+                                                   class="btn btn-sm btn-secundario" title="Ver detalles">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
                                                 <a href="editar_proveedor.php?ID_PROVEEDOR=<?= $row['ID_PROVEEDOR'] ?>" 
-                                                   class="btn btn-sm btn-outline-primary" title="Editar">
+                                                   class="btn btn-sm btn-primario" title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
                                                 <a href="eliminar_proveedor.php?ID_PROVEEDOR=<?= $row['ID_PROVEEDOR'] ?>" 
-                                                   class="btn btn-sm btn-outline-danger" 
+                                                   class="btn btn-sm btn-terciario" 
                                                    onclick="return confirm('¿Está seguro de eliminar este proveedor?')" title="Eliminar">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
-                                                <a href="ver_proveedor.php?ID_PROVEEDOR=<?= $row['ID_PROVEEDOR'] ?>" 
-                                                   class="btn btn-sm btn-outline-info" title="Ver detalles">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
+
                                             </div>
                                         </td>
                                     </tr>

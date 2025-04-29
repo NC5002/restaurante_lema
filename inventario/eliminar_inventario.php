@@ -1,6 +1,6 @@
 <?php
-include '../conexion.php'; 
-include '../Inventario.php';
+include '../includes/conexion.php'; 
+include '../clases/Inventario.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
