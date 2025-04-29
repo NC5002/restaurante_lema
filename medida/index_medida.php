@@ -36,8 +36,11 @@ include '../includes/header.php';
                                             <td><?php echo htmlspecialchars($row['ID_MEDIDA']); ?></td>
                                             <td><?php echo htmlspecialchars($row['DESCRIPCION']); ?></td>
                                             <td>
-                                                <a href="editar_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-primario me-1"><i class="bi bi-pencil"></i></a>
+                                                <div class="btn-group" role="group"> 
+                                                    <a href="ver_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-secundario"><i class="bi bi-eye"></i></a>
+                                                <a href="editar_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-primario"><i class="bi bi-pencil"></i></a>
                                                 <a href="eliminar_medida.php?ID_MEDIDA=<?php echo $row['ID_MEDIDA']; ?>" class="btn btn-sm btn-terciario" onclick="return confirm('¿Estás seguro de eliminar esta medida?')"><i class="bi bi-trash"></i></a>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>

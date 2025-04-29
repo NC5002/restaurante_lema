@@ -60,29 +60,62 @@ include '../includes/header.php';
                                 
                                 <select class="form-select" id="NUMERO_CATEGORIA" name="NUMERO_CATEGORIA" required placeholder="numero">
                                     <option value="<?= htmlspecialchars($menu->NUMERO_CATEGORIA) ?>"><?= htmlspecialchars($menu->NUMERO_CATEGORIA) ?></option>
-                                    <?php while ($categoria = $categorias->fetch(PDO::FETCH_ASSOC)): ?>
-                                        <option value="<?= $categoria['NUMERO_CATEGORIA'] ?>" <?= ($categoria['NUMERO_CATEGORIA'] == $menu->NUMERO_CATEGORIA) ? 'selected' : '' ?>>
-                                            <?= $categoria['NOMBRE'] ?>
-                                        </option>
-                                    <?php endwhile; ?>
+                                    <?php    
+                                    try {
+                                        // Consulta para obtener las medidas
+                                        $query = "SELECT ID_CATEGORIA, NOMBRE FROM categoria ORDER BY ID_CATEGORIA ASC";
+                                        $stmt = $db->prepare($query);
+                                        $stmt->execute();
+                                        $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        
+                                        // Generar opciones
+                                        foreach ($categorias as $categoria) {
+                                            echo '<option value="' . htmlspecialchars($categoria['ID_CATEGORIA']) . '">'
+                                                .htmlspecialchars($categoria['ID_CATEGORIA'])." - ". htmlspecialchars($categoria['NOMBRE']) . '</option>';
+                                        }
+                                    } catch(PDOException $e) {
+                                        echo '<option value="" disabled>Error cargando medidas</option>';
+                                    }
+                                    ?>    
                                 </select>
                                 <label for="NUMERO_CATEGORIA" class="form-label">Categoría</label>
                             </div>
-                            <div class="col-12 form-floating">
+                            <div class="col-6 form-floating">
                                 <textarea class="form-control" id="DESCRIPCION" name="DESCRIPCION" rows="3" placeholder="descripcion"><?= htmlspecialchars($menu->DESCRIPCION) ?></textarea>
                                 <label for="DESCRIPCION" class="form-label"><i class="bi bi-text-paragraph"></i> Descripción</label>
                             </div>
+
+                            <div class="col-6 form-floating mb-3">
+                                <select class="form-select" id="MEDIDA" name="MEDIDA" required>
+                                    <option value="<?= htmlspecialchars($menu->MEDIDA) ?>"><?= htmlspecialchars($menu->MEDIDA) ?></option>
+                                    <?php                               
+                                    try {
+                                        // Consulta para obtener las medidas
+                                        $query = "SELECT ID_MEDIDA, DESCRIPCION FROM medidas ORDER BY ID_MEDIDA ASC";
+                                        $stmt = $db->prepare($query);
+                                        $stmt->execute();
+                                        $medidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        
+                                        // Generar opciones
+                                        foreach ($medidas as $medida) {
+                                            echo '<option value="' . htmlspecialchars($medida['ID_MEDIDA']) . '">'
+                                                .  htmlspecialchars($medida['ID_MEDIDA']) ." - ".htmlspecialchars($medida['DESCRIPCION']) . '</option>';
+                                        }
+                                    } catch(PDOException $e) {
+                                        echo '<option value="" disabled>Error cargando medidas</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <label for="MEDIDA" class="form-label">Medida</label> <!-- Corregí el for para que coincida con el ID -->
+                            </div>
+
                             <div class="col-md-4 form-floating">
                                 
-                                    <input type="number" class="form-control" id="PRECIO" name="PRECIO" value="<?= htmlspecialchars($menu->PRECIO) ?>" step="0.01" min="0" required>
+                                <input type="number" class="form-control" id="PRECIO" name="PRECIO" value="<?= htmlspecialchars($menu->PRECIO) ?>" step="0.01" min="0" required>
                                 <label for="PRECIO" class="form-label">Precio</label>
                             </div>
                             <div class="col-md-4 form-floating">
-  
-                                <select class="form-select" id="ESTADO" name="ESTADO" required>
-                                    <option value="ACTIVO" <?= ($menu->ESTADO == '1') ? 'selected' : '' ?>>Activo</option>
-                                    <option value="INACTIVO" <?= ($menu->ESTADO == '0') ? 'selected' : '' ?>>Inactivo</option>
-                                </select>
+                                <input type="text" class="form-control" id="ESTADO" name="ESTADO" value="<?= htmlspecialchars($menu->ESTADO) ?>"required readonly>            
                                 <label for="ESTADO" class="form-label">Estado</label>
                             </div>
                             <div class="col-md-4 form-floating">

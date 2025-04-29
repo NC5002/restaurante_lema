@@ -12,7 +12,7 @@ include '../includes/header.php';
 ?>
 
 <body>
-    <div class="container mt-5">
+    <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -42,12 +42,14 @@ include '../includes/header.php';
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="editar_categoria.php?ID_CATEGORIA=<?php echo $row['ID_CATEGORIA']; ?>" class="btn btn-sm btn-primario me-1"><i class="bi bi-pencil"></i></a>
+                                                <div class="btn-group" role="group"> 
+                                                <a href="editar_categoria.php?ID_CATEGORIA=<?php echo $row['ID_CATEGORIA']; ?>" class="btn btn-sm btn-primario"><i class="bi bi-pencil"></i></a>
                                                 <?php if ($row['ESTADO'] == '1'): ?>
                                                     <a href="eliminar_categoria.php?ID_CATEGORIA=<?php echo $row['ID_CATEGORIA']; ?>" class="btn btn-sm btn-terciario" onclick="return confirm('¿Estás seguro de desactivar esta categoría?')"><i class="bi bi-trash"></i></a>
                                                 <?php else: ?>
                                                     <a href="activar_categoria.php?ID_CATEGORIA=<?php echo $row['ID_CATEGORIA']; ?>" class="btn btn-sm btn-secundario" onclick="return confirm('¿Estás seguro de activar esta categoría?')"><i class="bi bi-check-square"></i></a>    
                                                 <?php endif; ?>    
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>

@@ -29,6 +29,7 @@ include '../includes/header.php';
                                     <th>Imagen</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
+                                    <th>Medida</th>
                                     <th>Categoría</th>
                                     <th>Precio</th>
                                     <th>Estado</th>
@@ -49,6 +50,19 @@ include '../includes/header.php';
                                         </td>
                                         <td><?= htmlspecialchars($row['NOMBRE']) ?></td>
                                         <td><?= htmlspecialchars($row['DESCRIPCION']) ?></td>
+                                        <td>
+                                            <?php
+                                                try {                                                  
+                                                    $query = "SELECT DESCRIPCION FROM medidas WHERE ID_MEDIDA = ?";
+                                                    $stmt = $db->prepare($query);
+                                                    $stmt->execute([$row['MEDIDA']]);
+                                                    $medida = $stmt->fetch(PDO::FETCH_ASSOC);                                                    
+                                                    echo htmlspecialchars($medida['DESCRIPCION'] ?? 'Desconocido');
+                                                } catch(PDOException $e) {
+                                                    echo 'Error';
+                                                }
+                                            ?>
+                                            </td>
                                         <td><?= htmlspecialchars($nombre_categoria) ?></td>
                                         <td>$<?= number_format($row['PRECIO'], 2) ?></td>
                                         <td>
@@ -62,11 +76,19 @@ include '../includes/header.php';
                                                    class="btn btn-sm btn-primario" title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="eliminar_menu.php?CODIGO_MENU=<?= $row['CODIGO_MENU'] ?>" 
-                                                   class="btn btn-sm btn-terciario" 
-                                                   onclick="return confirm('¿Está seguro de desactivar este ítem?')" title="Desactivar">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
+                                                <?php if ($row['ESTADO'] == '1'): ?>
+                                                    <a href="eliminar_menu.php?CODIGO_MENU=<?= $row['CODIGO_MENU'] ?>" 
+                                                       class="btn btn-sm btn-terciario" 
+                                                       onclick="return confirm('¿Está seguro de desactivar este ítem?')" title="Desactivar">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <a href="activar_menu.php?CODIGO_MENU=<?= $row['CODIGO_MENU'] ?>" 
+                                                       class="btn btn-sm btn-secundario" 
+                                                       onclick="return confirm('¿Está seguro de activar este ítem?')" title="Activar">
+                                                        <i class="bi bi-check-square"></i>
+                                                    </a>
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>

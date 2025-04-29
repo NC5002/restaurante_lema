@@ -4,7 +4,6 @@ include '../clases/Menu.php';
 
 $database = new Conexion();
 $db = $database->obtenerConexion();
-$pdo = $database->obtenerConexion();
 
 $menu = new Menu($db);
 $categorias = $menu->leerCategorias();
@@ -12,7 +11,7 @@ $categorias = $menu->leerCategorias();
 // Consulta para obtener las categorías activas
 try {
     $sql = "SELECT ID_CATEGORIA, NOMBRE FROM categoria WHERE ESTADO = 1 ORDER BY NOMBRE ASC";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $db->prepare($sql);
     $stmt->execute();
     $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -20,16 +19,51 @@ try {
 }
 
 if($_POST){
-    $menu->NOMBRE = $_POST['NOMBRE'];
-    $menu->DESCRIPCION = $_POST['DESCRIPCION'];
-    $menu->PRECIO = $_POST['PRECIO'];
-    $menu->NUMERO_CATEGORIA = $_POST['NUMERO_CATEGORIA'];
-    $menu->IMAGEN = $_FILES['IMAGEN']['name'];
-    
-    // Subir imagen
-    $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["IMAGEN"]["name"]);
-    move_uploaded_file($_FILES["IMAGEN"]["tmp_name"], $target_file);
+    try {
+        // Validaciones básicas
+        if(empty($_POST['NOMBRE']) || empty($_POST['PRECIO']) || empty($_FILES['IMAGEN']['name'])) {
+            throw new Exception("Todos los campos requeridos deben estar completos");
+        }
+
+        // Procesar imagen
+        $target_dir = "../includes/img/";
+        $nombre_base = preg_replace('/[^a-zA-Z0-9]/', '_', $_POST['NOMBRE']);
+        $nombre_archivo = uniqid() . '_' . $nombre_base . '.' . pathinfo($_FILES["IMAGEN"]["name"], PATHINFO_EXTENSION);
+        $target_file = $target_dir . $nombre_archivo;
+
+        // Validar tipo de imagen
+        $mime_permitidos = ['image/jpeg', 'image/png', 'image/gif'];
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime_actual = $finfo->file($_FILES["IMAGEN"]["tmp_name"]);
+        
+        if(!in_array($mime_actual, $mime_permitidos)) {
+            throw new Exception("Solo se permiten imágenes JPG, PNG o GIF");
+        }
+
+        // Mover archivo
+        if(!move_uploaded_file($_FILES["IMAGEN"]["tmp_name"], $target_file)) {
+            throw new Exception("Error subiendo la imagen");
+        }
+
+        // Asignar valores
+        $menu->NOMBRE = $_POST['NOMBRE'];
+        $menu->DESCRIPCION = $_POST['DESCRIPCION'];
+        $menu->PRECIO = $_POST['PRECIO'];
+        $menu->NUMERO_CATEGORIA = $_POST['NUMERO_CATEGORIA'];
+        $menu->MEDIDA = $_POST['MEDIDA'];
+        $menu->IMAGEN = $nombre_archivo;
+
+        if($menu->crear()){
+            echo '<div class="alert alert-success">Ítem creado exitosamente</div>';
+        } else{
+            unlink($target_file); // Eliminar imagen si falla la BD
+            throw new Exception("Error al guardar en base de datos");
+        }
+        
+    } catch (Exception $e) {
+        echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
+    }
+
     
     if($menu->crear()){
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -64,21 +98,56 @@ include '../includes/header.php';
                                 <label for="NOMBRE" class="form-label"> Nombre</label>
                             </div>
                             <div class="col-md-6 form-floating mb-3">
-                                <select class="form-select" id="ID_CATEGORIA" name="ID_CATEGORIA" placeholder="categorias" required>
-                                    <option value="">Seleccione una categoría</option>
-                                    <?php foreach ($categorias as $categoria): ?>
-                                        <option value="<?= htmlspecialchars($categoria['ID_CATEGORIA']) ?>">
-                                            <?= htmlspecialchars($categoria['NOMBRE']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <label for="ID_CATEGORIA" class="form-label">Categoría
+                                <select class="form-select" id="NUMERO_CATEGORIA" name="NUMERO_CATEGORIA" required>
+                                        <option value="">Seleccione una categoria</option>
+                                        <?php                               
+                                        try {
+                                            // Consulta para obtener las medidas
+                                            $query = "SELECT ID_CATEGORIA, NOMBRE FROM categoria ORDER BY ID_CATEGORIA ASC";
+                                            $stmt = $db->prepare($query);
+                                            $stmt->execute();
+                                            $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                            
+                                            // Generar opciones
+                                            foreach ($categorias as $categoria) {
+                                                echo '<option value="' . htmlspecialchars($categoria['ID_CATEGORIA']) . '">'
+                                                    . htmlspecialchars($categoria['NOMBRE']) . '</option>';
+                                            }
+                                        } catch(PDOException $e) {
+                                            echo '<option value="" disabled>Error cargando categorias</option>';
+                                        }
+                                        ?>
+                                    </select>    
+                                <label for="NUMERO_CATEGORIA" class="form-label">Categoría
                                 </label>
                             </div>
-                            <div class="col-12 form-floating mb-3">
+                            <div class="col-6 form-floating mb-3">
                                 
                                 <textarea class="form-control" id="DESCRIPCION" name="DESCRIPCION" placeholder="descripcion" rows="3"></textarea>
                                 <label for="DESCRIPCION" class="form-label">Descripción</label>
+                            </div>
+                            <div class="col-6 form-floating mb-3">
+                                <select class="form-select" id="MEDIDA" name="MEDIDA" required>
+                                    <option value="">Seleccione una medida</option>
+                                    <?php                               
+                                    try {
+                                        // Consulta para obtener las medidas
+                                        $query = "SELECT ID_MEDIDA, DESCRIPCION FROM medidas ORDER BY DESCRIPCION ASC";
+                                        $stmt = $db->prepare($query);
+                                        $stmt->execute();
+                                        $medidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        
+                                        // Generar opciones
+                                        foreach ($medidas as $medida) {
+                                            echo '<option value="' . htmlspecialchars($medida['ID_MEDIDA']) . '">'
+                                                . htmlspecialchars($medida['DESCRIPCION']) . '</option>';
+                                        }
+                                    } catch(PDOException $e) {
+                                        echo '<option value="" disabled>Error cargando medidas</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <label for="MEDIDA" class="form-label">Medida</label> <!-- Corregí el for para que coincida con el ID -->
                             </div>
                             <div class="col-md-4 form-floating mb-3">
                                 

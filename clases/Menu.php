@@ -6,6 +6,7 @@ class Menu {
     public $CODIGO_MENU;
     public $NOMBRE;
     public $DESCRIPCION;
+    public $MEDIDA;
     public $PRECIO;
     public $NUMERO_CATEGORIA;
     public $ESTADO;
@@ -18,19 +19,21 @@ class Menu {
 
     function crear() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, PRECIO=:PRECIO, 
+                  SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, MEDIDA=:MEDIDA ,PRECIO=:PRECIO, 
                       NUMERO_CATEGORIA=:NUMERO_CATEGORIA, ESTADO='ACTIVO', IMAGEN=:IMAGEN, FECHA_REGISTRO=CURDATE()";
         
         $stmt = $this->conn->prepare($query);
         
-        $this->NOMBRE = htmlspecialchars(strip_tags($this->NOMBRE));
-        $this->DESCRIPCION = htmlspecialchars(strip_tags($this->DESCRIPCION));
-        $this->PRECIO = htmlspecialchars(strip_tags($this->PRECIO));
-        $this->NUMERO_CATEGORIA = htmlspecialchars(strip_tags($this->NUMERO_CATEGORIA));
-        $this->IMAGEN = htmlspecialchars(strip_tags($this->IMAGEN));
+        $this->NOMBRE = $this->NOMBRE;
+        $this->DESCRIPCION = $this->DESCRIPCION;
+        $this->MEDIDA = $this->MEDIDA;
+        $this->PRECIO = $this->PRECIO;
+        $this->NUMERO_CATEGORIA = $this->NUMERO_CATEGORIA;
+        $this->IMAGEN = $this->IMAGEN;
         
         $stmt->bindParam(":NOMBRE", $this->NOMBRE);
         $stmt->bindParam(":DESCRIPCION", $this->DESCRIPCION);
+        $stmt->bindParam(":MEDIDA", $this->MEDIDA);
         $stmt->bindParam(":PRECIO", $this->PRECIO);
         $stmt->bindParam(":NUMERO_CATEGORIA", $this->NUMERO_CATEGORIA);
         $stmt->bindParam(":IMAGEN", $this->IMAGEN);
@@ -58,6 +61,7 @@ class Menu {
         
         $this->NOMBRE = $row['NOMBRE'];
         $this->DESCRIPCION = $row['DESCRIPCION'];
+        $this->MEDIDA = $row['MEDIDA'];
         $this->PRECIO = $row['PRECIO'];
         $this->NUMERO_CATEGORIA = $row['NUMERO_CATEGORIA'];
         $this->ESTADO = $row['ESTADO'];
@@ -67,22 +71,24 @@ class Menu {
 
     function actualizar() {
         $query = "UPDATE " . $this->table_name . " 
-                  SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, PRECIO=:PRECIO, 
+                  SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, MEDIDA=:MEDIDA, PRECIO=:PRECIO, 
                       NUMERO_CATEGORIA=:NUMERO_CATEGORIA, ESTADO=:ESTADO, IMAGEN=:IMAGEN
                   WHERE CODIGO_MENU=:CODIGO_MENU";
         
         $stmt = $this->conn->prepare($query);
         
-        $this->NOMBRE = htmlspecialchars(strip_tags($this->NOMBRE));
-        $this->DESCRIPCION = htmlspecialchars(strip_tags($this->DESCRIPCION));
-        $this->PRECIO = htmlspecialchars(strip_tags($this->PRECIO));
-        $this->NUMERO_CATEGORIA = htmlspecialchars(strip_tags($this->NUMERO_CATEGORIA));
-        $this->ESTADO = htmlspecialchars(strip_tags($this->ESTADO));
-        $this->IMAGEN = htmlspecialchars(strip_tags($this->IMAGEN));
-        $this->CODIGO_MENU = htmlspecialchars(strip_tags($this->CODIGO_MENU));
+        $this->NOMBRE = $this->NOMBRE;
+        $this->DESCRIPCION = $this->DESCRIPCION;
+        $this->MEDIDA = $this->MEDIDA;
+        $this->PRECIO = $this->PRECIO;
+        $this->NUMERO_CATEGORIA = $this->NUMERO_CATEGORIA;
+        $this->ESTADO = $this->ESTADO;
+        $this->IMAGEN = $this->IMAGEN;
+        $this->CODIGO_MENU = $this->CODIGO_MENU;
         
         $stmt->bindParam(":NOMBRE", $this->NOMBRE);
         $stmt->bindParam(":DESCRIPCION", $this->DESCRIPCION);
+        $stmt->bindParam(":MEDIDA", $this->MEDIDA);
         $stmt->bindParam(":PRECIO", $this->PRECIO);
         $stmt->bindParam(":NUMERO_CATEGORIA", $this->NUMERO_CATEGORIA);
         $stmt->bindParam(":ESTADO", $this->ESTADO);
@@ -96,9 +102,21 @@ class Menu {
     }
 
     function eliminar() {
-        $query = "UPDATE " . $this->table_name . " SET ESTADO='INACTIVO' WHERE CODIGO_MENU = ?";
+        $query = "UPDATE " . $this->table_name . " SET ESTADO='0' WHERE CODIGO_MENU = ?";
         $stmt = $this->conn->prepare($query);
-        $this->CODIGO_MENU = htmlspecialchars(strip_tags($this->CODIGO_MENU));
+        $this->CODIGO_MENU = $this->CODIGO_MENU;
+        $stmt->bindParam(1, $this->CODIGO_MENU);
+        
+        if($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    function activar() {
+        $query = "UPDATE " . $this->table_name . " SET ESTADO='1' WHERE CODIGO_MENU = ?";
+        $stmt = $this->conn->prepare($query);
+        $this->CODIGO_MENU = $this->CODIGO_MENU;
         $stmt->bindParam(1, $this->CODIGO_MENU);
         
         if($stmt->execute()) {
