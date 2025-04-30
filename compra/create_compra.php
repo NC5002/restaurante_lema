@@ -156,7 +156,6 @@ include __DIR__ . '/../includes/header.php';
                 <label class="form-label">Descripción</label>                           
             </div>
             <div class="form-floating col-md-2">
-                
                 <input type="number" class="form-control cantidad" name="cantidad[]" min="1" required placeholder="Cantidad">
                 <label class="form-label">Cantidad</label>                           
             </div>

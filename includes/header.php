@@ -61,6 +61,11 @@ if (!isset($_SESSION['user_id'])){
                             <i class="bi bi-cart-plus"></i> Compras
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-primario" href="../factura/index_factura.php">
+                            <i class="bi bi-receipt-cutoff"></i> Facturas
+                        </a>
+                    </li>
                 </ul>
                 <div class="d-flex">
                     <ul class="navbar-nav">
