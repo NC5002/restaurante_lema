@@ -18,17 +18,17 @@ class Menu {
 
     function crear() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, MEDIDA=:MEDIDA ,PRECIO=:PRECIO, 
-                      NUMERO_CATEGORIA=:NUMERO_CATEGORIA, ESTADO='ACTIVO', IMAGEN=:IMAGEN, FECHA_REGISTRO=CURDATE()";
+                  SET NOMBRE=:NOMBRE, DESCRIPCION=:DESCRIPCION, MEDIDA=:MEDIDA, PRECIO=:PRECIO, 
+                      NUMERO_CATEGORIA=:NUMERO_CATEGORIA, ESTADO='1', IMAGEN=:IMAGEN, FECHA_REGISTRO=CURDATE()";
         
         $stmt = $this->conn->prepare($query);
         
-        $this->NOMBRE = $this->NOMBRE;
-        $this->DESCRIPCION = $this->DESCRIPCION;
-        $this->MEDIDA = $this->MEDIDA;
-        $this->PRECIO = $this->PRECIO;
-        $this->NUMERO_CATEGORIA = $this->NUMERO_CATEGORIA;
-        $this->IMAGEN = $this->IMAGEN;
+        $this->NOMBRE = htmlspecialchars(strip_tags($this->NOMBRE));
+        $this->DESCRIPCION = htmlspecialchars(strip_tags($this->DESCRIPCION));
+        $this->MEDIDA = htmlspecialchars(strip_tags($this->MEDIDA));
+        $this->PRECIO = htmlspecialchars(strip_tags($this->PRECIO));
+        $this->NUMERO_CATEGORIA = htmlspecialchars(strip_tags($this->NUMERO_CATEGORIA));
+        $this->IMAGEN = htmlspecialchars(strip_tags($this->IMAGEN));
         
         $stmt->bindParam(":NOMBRE", $this->NOMBRE);
         $stmt->bindParam(":DESCRIPCION", $this->DESCRIPCION);

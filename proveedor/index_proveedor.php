@@ -44,7 +44,7 @@ include '../includes/header.php';
                                         <td><?= date('d/m/Y', strtotime($row['FECHA_REGISTRO'])) ?></td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                            <a href="ver_proveedor.php?ID_PROVEEDOR=<?= $row['ID_PROVEEDOR'] ?>" 
+                                                <a href="ver_proveedor.php?ID_PROVEEDOR=<?= $row['ID_PROVEEDOR'] ?>" 
                                                    class="btn btn-sm btn-secundario" title="Ver detalles">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
