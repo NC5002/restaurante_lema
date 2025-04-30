@@ -65,12 +65,16 @@ include '../includes/header.php';
                                         <td><?= htmlspecialchars($nombre_categoria) ?></td>
                                         <td>$<?= number_format($row['PRECIO'], 2) ?></td>
                                         <td>
-                                            <span class="badge bg-<?= $row['ESTADO'] == '1' ? 'dark' : 'warning' ?>">
-                                                <?= htmlspecialchars($row['ESTADO']) ?>
+                                            <span class="badge bg-<?= $row['ESTADO'] == '1' ? 'success' : 'secondary' ?>">
+                                                <?= $row['ESTADO'] == '1' ? 'Activo' : 'Inactivo' ?>
                                             </span>
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
+                                                <a href="ver_menu.php?CODIGO_MENU=<?= $row['CODIGO_MENU'] ?>" 
+                                                   class="btn btn-sm btn-secundario" title="Ver detalles">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
                                                 <a href="editar_menu.php?CODIGO_MENU=<?= $row['CODIGO_MENU'] ?>" 
                                                    class="btn btn-sm btn-primario" title="Editar">
                                                     <i class="bi bi-pencil"></i>
