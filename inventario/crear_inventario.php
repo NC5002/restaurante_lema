@@ -49,14 +49,21 @@ include '../includes/header.php';
                                 $db = $database->obtenerConexion();
                                 
                                 try {
-                                    $query = "SELECT CODIGO_MENU, NOMBRE FROM menu WHERE ESTADO = 1 ORDER BY NOMBRE ASC";
+                                    $query = "SELECT m.*, md.DESCRIPCION as DESCRIPCION_MEDIDA 
+                                              FROM menu m
+                                              LEFT JOIN medidas md ON m.MEDIDA = md.ID_MEDIDA
+                                              WHERE m.ESTADO = 1 
+                                              ORDER BY m.NOMBRE ASC";
+                                    
                                     $stmt = $db->prepare($query);
                                     $stmt->execute();
                                     $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     
                                     foreach ($menus as $menu) {
                                         echo '<option value="'.htmlspecialchars($menu['CODIGO_MENU']).'">'
-                                            .htmlspecialchars($menu['NOMBRE']).'</option>';
+                                            .htmlspecialchars($menu['NOMBRE'])." - "
+                                            .htmlspecialchars($menu['DESCRIPCION'])." - "
+                                            .htmlspecialchars($menu['DESCRIPCION_MEDIDA']).'</option>';
                                     }
                                     
                                 } catch(PDOException $e) {
@@ -76,8 +83,8 @@ include '../includes/header.php';
                                 <label for="CANTIDAD" class="form-label">Cantidad</label>
                                 
                             </div>
-                            <div class="col-md-6 form-floating">
-                            <input type="text" class="form-control" id="ID_USUARIO" name="ID_USUARIO" required placeholder="id">
+                            <div class="col-md-6 form-floating" hidden>
+                            <input type="text" class="form-control" id="ID_USUARIO" name="ID_USUARIO" required placeholder="id" value="<?php echo $_SESSION['user_id']; ?>">
                                 <label for="ID_USUARIO" class="form-label">ID Usuario</label>
                                 
                             </div>
