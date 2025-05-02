@@ -15,7 +15,7 @@ $menu = new Menu($db);
 
 // Obtener lista de clientes y productos del menú
 $clientes = $cliente->leer();
-$productos = $menu->leer();
+$productos = $menu->leerFactura();
 
 // Procesar formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -64,13 +64,13 @@ include __DIR__ . '/../includes/header.php';
                 </div>
                 <div class="card-body">
                     <form id="formFactura" method="POST" action="create_factura.php">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="numero_factura" class="form-label">Número de Factura</label>
-                                <input type="text" class="form-control" id="numero_factura" name="numero_factura" required>
+                        <div class="row mb-1">
+                            <div class="col-md-6 form-floating">
+                                <input type="text" class="form-control" id="numero_factura" name="numero_factura" required placeholder="Número de Factura">
+                                <label for="numero_factura" class="form-label"> Número de Factura</label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="id_cliente" class="form-label">Cliente</label>
+                            <div class="col-md-6 form-floating">
+                                
                                 <div class="input-group">
                                     <select class="form-select" id="id_cliente" name="id_cliente" required>
                                         <option value="">Seleccione un cliente</option>
@@ -80,7 +80,8 @@ include __DIR__ . '/../includes/header.php';
                                             </option>
                                         <?php endwhile; ?>
                                     </select>
-                                    <a href="../clientes/crear_cliente.php" class="btn btn-outline-secondary" type="button">
+
+                                    <a href="../cliente/crear_cliente.php" class="btn btn-primario" type="button">
                                         <i class="bi bi-plus-circle"></i> Nuevo
                                     </a>
                                 </div>
@@ -88,49 +89,37 @@ include __DIR__ . '/../includes/header.php';
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="fecha" class="form-label">Fecha</label>
+                            <div class="col-md-6 form-floating">
+                                
                                 <input type="text" class="form-control" id="fecha" value="<?= date('d/m/Y H:i') ?>" readonly>
+                                <label for="fecha" class="form-label">Fecha</label>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Usuario</label>
+                            <div class="col-md-6 form-floating">
+                                
                                 <input type="text" class="form-control" value="<?= htmlspecialchars($_SESSION['user_nombre']) ?>" readonly>
                                 <input type="hidden" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
+                                <label class="form-label">Usuario</label>
                             </div>
                         </div>
 
                         <div class="card mb-3">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0"><i class="bi bi-list-ul"></i> Detalles de la Factura</h5>
+                            <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 color-primario"><i class="bi bi-list-ul"></i> Detalles de la Factura</h5>
+                                <button type="button" id="agregar-detalle" class="btn btn-sm btn-primario mt-2">
+                                    <i class="bi bi-plus-circle"></i> Añadir Producto
+                                </button>
                             </div>
                             <div class="card-body">
                                 <div id="detalles-container">
                                     <!-- Detalles se agregarán aquí dinámicamente -->
                                 </div>
-                                <button type="button" id="agregar-detalle" class="btn btn-sm btn-primary mt-2">
-                                    <i class="bi bi-plus-circle"></i> Añadir Producto
-                                </button>
+
                             </div>
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="subtotal" class="form-label">Subtotal</label>
-                                <input type="number" step="0.01" class="form-control" id="subtotal" name="subtotal" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="iva" class="form-label">IVA (15%)</label>
-                                <input type="number" step="0.01" class="form-control" id="iva" name="iva" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="total" class="form-label">Total</label>
-                                <input type="number" step="0.01" class="form-control" id="total" name="total" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="metodo_pago" class="form-label">Método de Pago</label>
+                        <div class="col-md-3">
+                                <label for="metodo_pago" class="form-label"><strong>Método de Pago</strong></label>
                                 <select class="form-select" id="metodo_pago" name="metodo_pago" required>
                                     <option value="">Seleccione...</option>
                                     <option value="Efectivo">Efectivo</option>
@@ -139,13 +128,26 @@ include __DIR__ . '/../includes/header.php';
                                     <option value="Tarjeta de crédito">Tarjeta de crédito</option>
                                 </select>
                             </div>
+                            <div class="col-md-3">
+                                <label for="subtotal" class="form-label"><strong>Subtotal</strong></label>
+                                <input type="number" step="0.01" class="form-control" id="subtotal" name="subtotal" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="iva" class="form-label"><strong>IVA (15%)</strong></label>
+                                <input type="number" step="0.01" class="form-control" id="iva" name="iva" readonly>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="total" class="form-label"><strong>Total</strong></label>
+                                <input type="number" step="0.01" class="form-control" id="total" name="total" readonly>
+                            </div>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="index_factura.php" class="btn btn-secondary me-md-2">
+                            <a href="index_factura.php" class="btn btn-secundario me-md-2">
                                 <i class="bi bi-arrow-left"></i> Volver
                             </a>
-                            <button type="submit" name="guardar_factura" class="btn btn-primary">
+                            <button type="submit" name="guardar_factura" class="btn btn-primario">
                                 <i class="bi bi-save"></i> Guardar Factura
                             </button>
                         </div>
@@ -158,10 +160,10 @@ include __DIR__ . '/../includes/header.php';
 
 <!-- Template para nuevos detalles (oculto) -->
 <template id="detalle-template">
-    <div class="detalle-item mb-3 p-3 border rounded">
+    <div class="detalle-item mb-1">
         <div class="row">
-            <div class="col-md-5">
-                <label class="form-label">Producto</label>
+            <div class="col-md-5 form-floating">
+                
                 <select class="form-select producto" name="codigo_menu[]" required>
                     <option value="">Seleccione un producto</option>
                     <?php while ($prod = $productos->fetch(PDO::FETCH_ASSOC)): ?>
@@ -170,20 +172,24 @@ include __DIR__ . '/../includes/header.php';
                         </option>
                     <?php endwhile; ?>
                 </select>
+                <label class="form-label">Producto</label>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Cantidad</label>
+            <div class="col-md-2 form-floating">
+                
                 <input type="number" class="form-control cantidad" name="cantidad[]" min="1" value="1" required>
+                <label class="form-label">Cantidad</label>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Precio Unitario</label>
+            <div class="col-md-2 form-floating">
+                
                 <input type="number" step="0.01" class="form-control precio" name="precio[]" min="0.01" required>
+                <label class="form-label">Precio Unitario</label>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Subtotal</label>
+            <div class="col-md-2 form-floating">
+                
                 <input type="number" step="0.01" class="form-control subtotal" readonly>
+                <label class="form-label">Subtotal</label>
             </div>
-            <div class="col-md-1 d-flex align-items-end">
+            <div class="col-md-1 d-flex align-items-end justify-content-between align-items-center">
                 <button type="button" class="btn btn-terciario btn-sm eliminar-detalle">
                     <i class="bi bi-trash"></i>
                 </button>
@@ -197,47 +203,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const detallesContainer = document.getElementById('detalles-container');
     const agregarBtn = document.getElementById('agregar-detalle');
     const template = document.getElementById('detalle-template');
-    const form = document.getElementById('formFactura');
     
-    // Agregar nuevo detalle
-    agregarBtn.addEventListener('click', function() {
-        const clone = template.content.cloneNode(true);
-        detallesContainer.appendChild(clone);
+    // Función para inicializar eventos de un nuevo detalle
+    function inicializarEventosDetalle(detalleItem) {
+        const selectProducto = detalleItem.querySelector('.producto');
+        const cantidadInput = detalleItem.querySelector('.cantidad');
+        const precioInput = detalleItem.querySelector('.precio');
         
-        // Configurar evento change para el select de producto
-        const selectProducto = clone.querySelector('.producto');
+        // Cargar precio al seleccionar producto
         selectProducto.addEventListener('change', function() {
-            const precio = this.options[this.selectedIndex].dataset.precio;
-            const item = this.closest('.detalle-item');
-            item.querySelector('.precio').value = precio;
-            calcularSubtotal(item);
-            actualizarTotales();
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                precioInput.value = selectedOption.getAttribute('data-precio');
+                calcularSubtotal(detalleItem);
+                actualizarTotales();
+            }
         });
         
-        // Configurar evento input para cantidad y precio
-        const cantidadInput = clone.querySelector('.cantidad');
-        const precioInput = clone.querySelector('.precio');
-        
+        // Actualizar al cambiar cantidad o precio
         cantidadInput.addEventListener('input', function() {
-            calcularSubtotal(this.closest('.detalle-item'));
+            calcularSubtotal(detalleItem);
             actualizarTotales();
         });
         
         precioInput.addEventListener('input', function() {
-            calcularSubtotal(this.closest('.detalle-item'));
+            calcularSubtotal(detalleItem);
             actualizarTotales();
         });
-    });
+    }
     
-    // Eliminar detalle
-    detallesContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('eliminar-detalle')) {
-            e.target.closest('.detalle-item').remove();
-            actualizarTotales();
-        }
-    });
-    
-    // Calcular subtotal para un item
+    // Calcular subtotal para un ítem
     function calcularSubtotal(item) {
         const cantidad = parseFloat(item.querySelector('.cantidad').value) || 0;
         const precio = parseFloat(item.querySelector('.precio').value) || 0;
@@ -245,9 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
         item.querySelector('.subtotal').value = subtotal.toFixed(2);
     }
     
-    // Función para actualizar totales
+    // Actualizar totales generales
     function actualizarTotales() {
         let subtotalTotal = 0;
+        
         document.querySelectorAll('.subtotal').forEach(input => {
             subtotalTotal += parseFloat(input.value) || 0;
         });
@@ -260,7 +256,23 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('total').value = total.toFixed(2);
     }
     
-    // Agregar un detalle por defecto al cargar
+    // Agregar nuevo detalle
+    agregarBtn.addEventListener('click', function() {
+        const clone = template.content.cloneNode(true);
+        const detalleItem = clone.querySelector('.detalle-item');
+        detallesContainer.appendChild(clone);
+        inicializarEventosDetalle(detalleItem);
+    });
+    
+    // Eliminar detalle
+    detallesContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('eliminar-detalle')) {
+            e.target.closest('.detalle-item').remove();
+            actualizarTotales();
+        }
+    });
+    
+    // Agregar primer detalle al cargar la página
     agregarBtn.click();
 });
 </script>

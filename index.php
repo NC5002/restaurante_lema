@@ -46,6 +46,10 @@
 <!-- Contenido de la página -->
 <div class="container mt-5 text-center ">
 
+    <div class="text-center mb-4">
+        <img src="./includes/img/logo.png" alt="logo" class="img-fluid" width="200px">
+    </div>
+
      <p class="lead mt-4">Inicia sesión o Regístrate para acceder a nuestros servicios.</p>
     
     <div class="mt-5">

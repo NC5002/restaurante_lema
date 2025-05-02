@@ -22,7 +22,7 @@ if ($_POST) {
 }
 
 include '../includes/head.php'; // Include header file for Bootstrap and other styles
-include '../includes/header.php';
+include '../includes/header_configuracion.php';
 ?>
 
 <body>

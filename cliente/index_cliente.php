@@ -6,7 +6,21 @@ $database = new Conexion();
 $db = $database->obtenerConexion();
 
 $cliente = new Cliente($db);
-$stmt = $cliente->leer();
+
+// --- INICIO MODIFICACIÓN FILTRO ---
+// Obtener el término de búsqueda si existe
+$cedula_buscar = isset($_GET['cedula_buscar']) ? trim($_GET['cedula_buscar']) : '';
+
+if (!empty($cedula_buscar)) {
+    // Si hay un término de búsqueda, usar el método de búsqueda
+    $stmt = $cliente->buscarPorCedula($cedula_buscar);
+} else {
+    // Si no hay búsqueda, obtener todos los clientes
+    $stmt = $cliente->leer();
+}
+// --- FIN MODIFICACIÓN FILTRO ---
+
+
 include '../includes/head.php'; // Include header file for Bootstrap and other styles
 include '../includes/header.php';
 ?>
@@ -22,6 +36,37 @@ include '../includes/header.php';
                     </a>
                 </div>
                 <div class="card-body">
+                    
+                    <!-- --- INICIO FORMULARIO DE BÚSQUEDA --- -->
+                    <form method="GET" action="./index_cliente.php" class="mb-4">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-8">
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                name="cedula_buscar" 
+                                placeholder="Buscar por Cédula..." 
+                                value="<?= htmlspecialchars($cedula_buscar) ?>" 
+                            />
+                            </div>
+                            <div class="col-md-4 align-items-end">
+                            <?php if (!empty($cedula_buscar)): ?>
+                                <div class="row">
+                                <a href="./index_cliente.php" class="btn btn-terciario w-100" title="Limpiar búsqueda">
+                                    <i class="bi bi-x-lg"></i> Limpiar
+                                </a>
+                                </div>
+                            <?php else: ?>  
+                                <button class="btn btn-primario w-100" type="submit">
+                                    <i class="bi bi-search"></i> Buscar
+                                </button>     
+                            <?php endif; ?>
+                            </div>
+                            
+                        </div>
+                    </form>
+                    <!-- --- FIN FORMULARIO DE BÚSQUEDA --- -->
+
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-light">
                             <thead>
@@ -36,7 +81,11 @@ include '../includes/header.php';
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                                <?php 
+                                // --- INICIO VERIFICACIÓN RESULTADOS ---
+                                if ($stmt->rowCount() > 0): 
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): 
+                                ?>
                                     <tr>
                                         <td><?= htmlspecialchars($row['ID_CLIENTE']) ?></td>
                                         <td><?= htmlspecialchars($row['NUMERO_CEDULA']) ?></td>
@@ -54,9 +103,6 @@ include '../includes/header.php';
                                                    class="btn btn-sm btn-primario" title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-
-
-
                                                 <a href="eliminar_cliente.php?ID_CLIENTE=<?= $row['ID_CLIENTE'] ?>" 
                                                    class="btn btn-sm btn-terciario" 
                                                    onclick="return confirm('¿Está seguro de eliminar este cliente?')" title="Eliminar">
@@ -65,7 +111,20 @@ include '../includes/header.php';
                                             </div>
                                         </td>
                                     </tr>
-                                <?php endwhile; ?>
+                                <?php 
+                                    endwhile; 
+                                else: 
+                                // --- MENSAJE SI NO HAY RESULTADOS ---
+                                ?>
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            No se encontraron clientes<?= !empty($cedula_buscar) ? ' con la cédula indicada.' : '.' ?>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                endif; 
+                                // --- FIN VERIFICACIÓN RESULTADOS ---
+                                ?>
                             </tbody>
                         </table>
                     </div>

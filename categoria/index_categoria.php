@@ -8,7 +8,7 @@ $db = $database->obtenerConexion();
 $categoria = new Categoria($db);
 $stmt = $categoria->leer();
 include '../includes/head.php'; // Include header file for Bootstrap and other styles
-include '../includes/header.php';
+include '../includes/header_configuracion.php';
 ?>
 
 <body>
@@ -16,7 +16,7 @@ include '../includes/header.php';
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
                         <h2 class="mb-0 color-primario"><i class="bi bi-list-ul"></i> Lista de Categorías</h2>
                         <a href="crear_categoria.php" class="btn btn-primario"><i class="bi bi-plus-circle"></i> Nueva Categoría</a>
                     </div>

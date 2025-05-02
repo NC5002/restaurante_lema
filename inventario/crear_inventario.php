@@ -34,8 +34,8 @@ include '../includes/header.php';
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"><i class="bi bi-box-seam"></i> Registrar Nuevo Inventario</h3>
+                <div class="card-header bg-dark">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-box-seam"></i> Registrar Nuevo Inventario</h3>
                 </div>
                 <div class="card-body">
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -90,10 +90,10 @@ include '../includes/header.php';
                             </div>
                             <div class="col-12 mt-4">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="submit" class="btn btn-primary me-md-2">
+                                    <button type="submit" class="btn btn-primario me-md-2">
                                         <i class="bi bi-save"></i> Guardar Registro
                                     </button>
-                                    <a href="index_inventario.php" class="btn btn-outline-secondary">
+                                    <a href="index_inventario.php" class="btn btn-secundario">
                                         <i class="bi bi-arrow-left"></i> Volver al Listado
                                     </a>
                                 </div>

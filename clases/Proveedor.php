@@ -110,5 +110,19 @@ class Proveedor {
         }
         return false;
     }
+
+    // Dentro de la clase Proveedor
+    function buscarPorRuc($ruc) {
+        $query = "SELECT * FROM proveedor
+                WHERE RUC_CEDULA LIKE :ruc 
+                ORDER BY NOMBRE ASC";
+        
+        $stmt = $this->conn->prepare($query);
+        $ruc = "%$ruc%";
+        $stmt->bindParam(":ruc", $ruc);
+        $stmt->execute();
+        
+        return $stmt;
+    }
 }
 ?>

@@ -39,9 +39,7 @@ if (!isset($_SESSION['user_id'])){
     <div class="container">
     <nav class="navbar navbar-expand-lg  bg-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand color-primario" href="index.php">
-                <i class="bi bi-cup-hot-fill"></i>
-            </a>
+
             <button class="navbar-toggler btn-primario" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -73,6 +71,16 @@ if (!isset($_SESSION['user_id'])){
                             <i class="bi bi-box-seam"></i> Inventario
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-primario" href="../compra/index_compra.php">
+                            <i class="bi bi-cart-plus"></i> Compras
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-primario" href="../factura/index_factura.php">
+                            <i class="bi bi-receipt-cutoff"></i> Facturas
+                        </a>
+                    </li>
                 </ul>
                 <div class="d-flex">
                     <ul class="navbar-nav">
@@ -86,11 +94,13 @@ if (!isset($_SESSION['user_id'])){
                                         <i class="bi bi-person"></i> Perfil
                                     </a>
                                 </li>
+                                <?php if ($_SESSION['user_rol'] == 1) { ?>
                                 <li>
-                                    <a class="dropdown-item color-primario" href="#">
+                                    <a class="dropdown-item color-primario" href="./dashboard_configuracion.php">
                                         <i class="bi bi-gear"></i> Configuración
                                     </a>
                                 </li>
+                                <?php } ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item color-secundario" href="./logout.php">
@@ -117,6 +127,16 @@ if (!isset($_SESSION['user_id'])){
     </div>
 </div>
     
+
+    <div class="text-center mb-4">
+        <img src="./includes/img/logo.png" alt="logo" class="img-fluid" width="200px">
+    </div>
+
+    <div class="container mt-5 text-center">
+        <h1 class="display-4">Bienvenido al Sistema de Gestión de Restaurante</h1>
+    
+        </div>  
+
 <?php
 include './includes/footer.php'; // Include footer file for Bootstrap and other scripts
 ?>

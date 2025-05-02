@@ -107,5 +107,36 @@ class Cliente {
         }
         return false;
     }
+
+    // --- INICIO NUEVO MÉTODO DE BÚSQUEDA ---
+    /**
+     * Busca clientes por número de cédula (coincidencia parcial al inicio).
+     * @param string $cedula El número de cédula (o parte inicial) a buscar.
+     * @return PDOStatement El objeto PDOStatement con los resultados.
+     */
+    function buscarPorCedula($cedula) {
+        // Consulta para buscar cédulas que comiencen con el término proporcionado
+        $query = "SELECT * FROM " . $this->table_name . " 
+                  WHERE NUMERO_CEDULA LIKE ? 
+                  ORDER BY APELLIDO, NOMBRE";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        // Limpiar el término de búsqueda
+        $cedula_limpia = htmlspecialchars(strip_tags($cedula));
+        
+        // Añadir el comodín '%' para buscar coincidencias que *empiecen* con la cédula
+        $searchTerm = $cedula_limpia . "%"; 
+        
+        // Vincular el parámetro de búsqueda
+        $stmt->bindParam(1, $searchTerm);
+        
+        // Ejecutar la consulta
+        $stmt->execute();
+        
+        // Devolver el resultado (PDOStatement)
+        return $stmt;
+    }
+    // --- FIN NUEVO MÉTODO DE BÚSQUEDA ---
 }
 ?>

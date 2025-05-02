@@ -39,9 +39,7 @@ if (!isset($_SESSION['user_id'])){
     <div class="container">
     <nav class="navbar navbar-expand-lg  bg-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand color-primario" href="index.php">
-                <i class="bi bi-cup-hot-fill"></i>
-            </a>
+
             <button class="navbar-toggler btn-primario" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -54,34 +52,25 @@ if (!isset($_SESSION['user_id'])){
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link link-primario" href="./categoria/index_categoria.php" >
+                        <a class="nav-link color-primario" href="./usuario/index_usuario.php">
+                            <i class="bi bi-people"></i> Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link color-primario " href="./categoria/index_categoria.php" >
                             <i class="bi bi-bookmark"></i> Categorías
                         </a>
                         
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link link-primario" href="./menu/index_menu.php">
-                            <i class="bi bi-menu-button"></i> Menú
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link link-primario" href="./cliente/index_cliente.php">
-                            <i class="bi bi-people"></i> Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link link-primario" href="./medida/index_medida.php">
+                        <a class="nav-link color-primario" href="./medida/index_medida.php">
                             <i class="bi bi-rulers"></i> Medidas
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link link-primario" href="./proveedor/index_proveedor.php">
-                            <i class="bi bi-person-lines-fill"></i> Proveedor
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link link-primario" href="./inventario/index_inventario.php">
-                            <i class="bi bi-box-seam"></i> Inventario
+                        <a class="nav-link color-primario" href="./ingresos/index_ingresos.php">
+                            <i class="bi bi-door-open"></i> Ingresos
                         </a>
                     </li>
                 </ul>
@@ -95,11 +84,6 @@ if (!isset($_SESSION['user_id'])){
                                 <li>
                                     <a class="dropdown-item color-primario" href="#">
                                         <i class="bi bi-person"></i> Perfil
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item color-primario" href="#">
-                                        <i class="bi bi-gear"></i> Configuración
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
@@ -128,6 +112,15 @@ if (!isset($_SESSION['user_id'])){
     </div>
 </div>
     
+
+<div class="text-center mb-4">
+        <img src="./includes/img/logo.png" alt="logo" class="img-fluid" width="200px">
+    </div>
+
+    <div class="container mt-5 text-center">
+        <h1 class="display-4">Bienvenido a la Sección de Configuración</h1>
+    
+        </div>  
 <?php
 include './includes/footer.php'; // Include footer file for Bootstrap and other scripts
 ?>

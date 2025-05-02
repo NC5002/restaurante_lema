@@ -51,6 +51,30 @@ class Menu {
         return $stmt;
     }
 
+    function leerFactura() {
+        // Consulta modificada para mostrar solo los datos del menú
+        $query = "SELECT CODIGO_MENU, NOMBRE, PRECIO, NUMERO_CATEGORIA 
+          FROM {$this->table_name} 
+          WHERE NUMERO_CATEGORIA <> 3 
+          AND ESTADO = 1 /* Si tienes un campo de estado */
+          ORDER BY NOMBRE";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    function leerPorCategoria($id_categoria) {
+        $query = "SELECT * FROM " . $this->table_name . " 
+                  WHERE NUMERO_CATEGORIA = :categoria_id AND ESTADO = 1
+                  ORDER BY NOMBRE";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":categoria_id", $id_categoria);
+        $stmt->execute();
+        
+        return $stmt;
+    }
+
     function leerUno() {
         $query = "SELECT * FROM " . $this->table_name . " WHERE CODIGO_MENU = ?";
         $stmt = $this->conn->prepare($query);

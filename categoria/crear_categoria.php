@@ -17,7 +17,7 @@ if($_POST){
     }
 }
 include '../includes/head.php'; // Include header file for Bootstrap and other styles
-include '../includes/header.php';
+include '../includes/header_configuracion.php';
 ?>
 
 
@@ -33,7 +33,7 @@ include '../includes/header.php';
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                             <div class="form-floating mb-3">
                                 
-                                <input type="text" class="form-control" id="NOMBRE" name="NOMBRE" required>
+                                <input type="text" class="form-control" id="NOMBRE" name="NOMBRE" required placeholder="nombre">
                                 <label for="NOMBRE" class="form-label"><i class="bi bi-tag"></i> Nombre</label>
 
                             </div>

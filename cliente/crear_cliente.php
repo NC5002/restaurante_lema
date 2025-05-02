@@ -2,49 +2,6 @@
 include '../includes/conexion.php'; 
 include '../clases/Cliente.php';
 
-function validarCedula($cedula) {
-    // Verificar que la cédula tenga exactamente 10 dígitos
-    if (strlen($cedula) != 10) {
-        return "La cédula debe tener 10 dígitos.";
-    }
-
-    // Los dos primeros dígitos deben estar entre 01 y 24, que son las provincias de Ecuador
-    $provincia = substr($cedula, 0, 2);
-    if ($provincia < 1 || $provincia > 24) {
-        return "La cédula no corresponde a una provincia válida.";
-    }
-
-    // El tercer dígito debe estar entre 0 y 6 para cédulas de personas naturales
-    $tercerDigito = substr($cedula, 2, 1);
-    if ($tercerDigito > 6) {
-        return "El tercer dígito es inválido.";
-    }
-
-    // Aplicar el algoritmo de verificación de cédula
-    $coeficientes = [2, 1, 2, 1, 2, 1, 2, 1, 2]; // Coeficientes para multiplicar los primeros 9 dígitos
-    $suma = 0;
-
-    // Calcular la suma del algoritmo de verificación
-    for ($i = 0; $i < 9; $i++) {
-        $valor = (int)$cedula[$i] * $coeficientes[$i];
-        if ($valor >= 10) {
-            $valor -= 9;
-        }
-        $suma += $valor;
-    }
-
-    // Obtener el dígito verificador
-    $digitoVerificador = (10 - ($suma % 10)) % 10;
-
-    // Comparar el dígito verificador con el último dígito de la cédula
-    if ($digitoVerificador != (int)$cedula[9]) {
-        return "La cédula es inválida.";
-    }
-
-    return true; // La cédula es válida
-}
-
-
 $database = new Conexion();
 $db = $database->obtenerConexion();
 
@@ -110,12 +67,13 @@ include '../includes/header.php';
                                 <input type="text" class="form-control" id="APELLIDO" name="APELLIDO" required placeholder="numero">
                                 <label for="APELLIDO" class="form-label">Apellido</label>
                             </div>
-                            <div class="col-md-6 form-floating">
-                                
-                                <input type="text" class="form-control" id="NUMERO_CEDULA" name="NUMERO_CEDULA" required
-                                       pattern="[0-9]{10}" title="Ingrese 10 dígitos numéricos" placeholder="numero">
-                                <label for="NUMERO_CEDULA" class="form-label">Número de Cédula</label>
-                            </div>
+                                <!-- Modificación del campo de cédula para incluir validación en tiempo real -->
+                                <div class="col-md-6 form-floating">
+                                    <input type="text" class="form-control" id="NUMERO_CEDULA" name="NUMERO_CEDULA" required
+                                        pattern="[0-9]{10}" title="Ingrese 10 dígitos numéricos" placeholder="numero">
+                                    <label for="NUMERO_CEDULA" class="form-label">Número de Cédula</label>
+                                    <!-- Los mensajes de retroalimentación se agregarán dinámicamente con JavaScript -->
+                                </div>
                             <div class="col-md-6 form-floating">
                                 
                                 <input type="tel" class="form-control" id="TELEFONO" name="TELEFONO" 
@@ -149,6 +107,69 @@ include '../includes/header.php';
         </div>
     </div>
 </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener el campo de cédula
+    const cedulaInput = document.getElementById('NUMERO_CEDULA');
+    
+    // Crear elementos para feedback
+    const feedbackDiv = document.createElement('div');
+    feedbackDiv.className = 'invalid-feedback';
+    cedulaInput.parentNode.appendChild(feedbackDiv);
+    
+    // Crear un indicador de validación
+    const validIndicator = document.createElement('div');
+    validIndicator.className = 'valid-feedback';
+    validIndicator.textContent = 'Cédula válida';
+    cedulaInput.parentNode.appendChild(validIndicator);
+    
+    // Agregar evento para validar la cédula cuando cambie el valor
+    cedulaInput.addEventListener('blur', function() {
+        // Solo validar si hay 10 dígitos
+        if(this.value.length === 10) {
+            validarCedulaAjax(this.value);
+        } else {
+            // Limpiar feedback si no tiene 10 dígitos
+            feedbackDiv.textContent = '';
+            cedulaInput.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+    
+    // Función para validar cédula mediante AJAX
+    function validarCedulaAjax(cedula) {
+        // Crear objeto FormData
+        const formData = new FormData();
+        formData.append('action', 'validar_cedula');
+        formData.append('cedula', cedula);
+        
+        // Configurar y enviar la solicitud AJAX
+        fetch('../ajax/validar_cedula.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.valido) {
+                // Cédula válida
+                cedulaInput.classList.remove('is-invalid');
+                cedulaInput.classList.add('is-valid');
+                feedbackDiv.textContent = '';
+            } else {
+                // Cédula inválida
+                cedulaInput.classList.remove('is-valid');
+                cedulaInput.classList.add('is-invalid');
+                feedbackDiv.textContent = data.mensaje;
+            }
+        })
+        .catch(error => {
+            console.error('Error al validar cédula:', error);
+        });
+    }
+});
+
+</script>
 
 <?php 
 include '../includes/footer.php'; // Include footer file for Bootstrap and other scripts

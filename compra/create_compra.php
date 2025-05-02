@@ -57,18 +57,23 @@ include __DIR__ . '/../includes/header.php';
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-dark text-white">
+                <div class="card-header bg-dark">
                     <h3 class="mb-0 color-primario"><i class="bi bi-cart-plus"></i> Registrar Nueva Compra</h3>
                 </div>
                 <div class="card-body">
                     <form id="formCompra" method="POST" action="create_compra.php">
                         <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="numero_factura" class="form-label">Número de Factura</label>
+                            <div class="col-md-4 form-floating">
+                               
                                 <input type="text" class="form-control" id="numero_factura" name="numero_factura" required>
+                                <label for="numero_factura" class="form-label">Número de Factura</label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="id_proveedor" class="form-label">Proveedor</label>
+                            <div class="col-md-4 form-floating">
+                                
+                                <input type="text" class="form-control" id="fecha" value="<?= date('Y/m/d H:i') ?>" readonly>
+                                <label for="fecha" class="form-label">Fecha de ingreso</label>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="input-group">
                                     <select class="form-select" id="id_proveedor" name="id_proveedor" required>
                                         <option value="">Seleccione un proveedor</option>
@@ -78,18 +83,16 @@ include __DIR__ . '/../includes/header.php';
                                             </option>
                                         <?php endwhile; ?>
                                     </select>
-                                    <a href="../proveedor/crear_proveedor.php" class="btn btn-outline-secondary" type="button">
+                                    <a href="../proveedor/crear_proveedor.php" class="btn btn-primario" type="button">
                                         <i class="bi bi-plus-circle"></i> Nuevo
                                     </a>
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="fecha" class="form-label">Fecha</label>
-                                <input type="text" class="form-control" id="fecha" value="<?= date('Y/m/d H:i') ?>" readonly>
-                            </div>
+
                             <div class="col-md-6" hidden>
                                 <label class="form-label">Usuario</label>
                                 <input type="text" name="id_usuario" value="<?= $_SESSION['user_id'] ?>">
@@ -97,26 +100,27 @@ include __DIR__ . '/../includes/header.php';
                         </div>
 
                         <div class="card mb-3">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0"><i class="bi bi-list-ul"></i> Detalles de la Compra</h5>
+                            <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 color-primario"><i class="bi bi-list-ul"></i> Detalles de la Compra</h5>
+                                <button type="button" id="agregar-detalle" class="btn btn-sm btn-primario mt-2">
+                                    <i class="bi bi-plus-circle"></i> Añadir Detalle
+                                </button>
                             </div>
                             <div class="card-body">
                                 <div id="detalles-container">
                                     <!-- Detalles se agregarán aquí dinámicamente -->
                                 </div>
-                                <button type="button" id="agregar-detalle" class="btn btn-sm btn-primary mt-2">
-                                    <i class="bi bi-plus-circle"></i> Añadir Detalle
-                                </button>
+
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="iva" class="form-label">IVA (15%)</label>
+                                <label for="iva" class="form-label"><strong>IVA (15%)</strong></label>
                                 <input type="number" class="form-control" id="iva" name="iva" readonly>
                             </div>
                             <div class="col-md-4">
-                                <label for="metodo_pago" class="form-label">Método de Pago</label>
+                                <label for="metodo_pago" class="form-label"><strong>Método de Pago</strong></label>
                                 <select class="form-select" id="metodo_pago" name="metodo_pago" required>
                                     <option value="">Seleccione...</option>
                                     <option value="Efectivo">Efectivo</option>
@@ -127,7 +131,7 @@ include __DIR__ . '/../includes/header.php';
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label for="total" class="form-label">Total</label>
+                                <label for="total" class="form-label"><strong>Total</strong></label>
                                 <input type="number" step="0.01" class="form-control" id="total" name="total" readonly>
                             </div>
                         </div>
@@ -151,24 +155,24 @@ include __DIR__ . '/../includes/header.php';
 <template id="detalle-template">
     <div class="detalle-item">
         <div class="row">
-            <div class="form-floating col-md-5" >
+            <div class=" col-md-5" >
                 <input type="text" class="form-control descripcion" name="descripcion[]" required placeholder="Descripción">
-                <label class="form-label">Descripción</label>                           
+                      
             </div>
-            <div class="form-floating col-md-2">
+            <div class="col-md-2">
                 <input type="number" class="form-control cantidad" name="cantidad[]" min="1" required placeholder="Cantidad">
-                <label class="form-label">Cantidad</label>                           
+                          
             </div>
-            <div class="form-floating col-md-2">
+            <div class=" col-md-2">
                 
                 <input type="number" step="0.01" class="form-control precio" name="precio[]" min="0.01" required placeholder="Precio Unitario">
-                <label class="form-label">Precio Unitario</label> 
+ 
             </div>
-            <div class="form-floating col-md-2">
+            <div class=" col-md-2">
                 <input type="number" step="0.01" class="form-control subtotal" readonly placeholder="Subtotal">
-                <label class="form-label">Subtotal</label>
+
             </div>
-            <div class="col-md-1 d-flex align-items-end">
+            <div class="col-md-1 d-flex align-items-end justify-content-between align-items-center">
                 <button type="button" class="btn btn-terciario btn-sm eliminar-detalle">
                     <i class="bi bi-trash"></i>
                 </button>
@@ -184,29 +188,91 @@ document.addEventListener('DOMContentLoaded', function() {
     const template = document.getElementById('detalle-template');
     const form = document.getElementById('formCompra');
     
+    // Validar campos numéricos en tiempo real
+    function validarCampoNumerico(input, permitirDecimales = true, min = 0) {
+        let valor = input.value;
+        
+        // Eliminar caracteres no numéricos excepto punto decimal si se permiten decimales
+        if (permitirDecimales) {
+            valor = valor.replace(/[^0-9.]/g, '');
+            
+            // Asegurar que solo haya un punto decimal
+            const puntos = valor.match(/\./g);
+            if (puntos && puntos.length > 1) {
+                valor = valor.substring(0, valor.lastIndexOf('.'));
+            }
+            
+            // Permitir solo 2 decimales
+            if (valor.includes('.')) {
+                const partes = valor.split('.');
+                if (partes[1].length > 2) {
+                    partes[1] = partes[1].substring(0, 2);
+                    valor = partes.join('.');
+                }
+            }
+        } else {
+            valor = valor.replace(/[^0-9]/g, '');
+        }
+        
+        // Verificar valor mínimo
+        const numValor = parseFloat(valor) || 0;
+        if (numValor < min && valor !== '') {
+            valor = min.toString();
+        }
+        
+        // Actualizar valor en el input solo si ha cambiado
+        if (input.value !== valor) {
+            input.value = valor;
+        }
+        
+        return numValor;
+    }
+    
     // Agregar nuevo detalle
     agregarBtn.addEventListener('click', function() {
         const clone = template.content.cloneNode(true);
         detallesContainer.appendChild(clone);
+        
+        // Configurar validación para el nuevo detalle
+        const nuevoDetalle = detallesContainer.lastElementChild;
+        configurarValidacionDetalle(nuevoDetalle);
+        
         actualizarCalculos();
     });
     
+    // Configurar validación para un elemento detalle
+    function configurarValidacionDetalle(detalleItem) {
+        const cantidadInput = detalleItem.querySelector('.cantidad');
+        const precioInput = detalleItem.querySelector('.precio');
+        
+        // Validar cantidad (solo números enteros, mínimo 1)
+        cantidadInput.addEventListener('input', function() {
+            validarCampoNumerico(this, false, 1);
+            actualizarSubtotal(detalleItem);
+        });
+        
+        // Validar precio (números con decimales, mínimo 0.01)
+        precioInput.addEventListener('input', function() {
+            validarCampoNumerico(this, true, 0.01);
+            actualizarSubtotal(detalleItem);
+        });
+    }
+    
+    // Calcular subtotal para un detalle específico
+    function actualizarSubtotal(detalleItem) {
+        const cantidad = parseFloat(detalleItem.querySelector('.cantidad').value) || 0;
+        const precio = parseFloat(detalleItem.querySelector('.precio').value) || 0;
+        const subtotal = cantidad * precio;
+        detalleItem.querySelector('.subtotal').value = subtotal.toFixed(2);
+        
+        actualizarCalculos();
+    }
+    
     // Eliminar detalle
     detallesContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('eliminar-detalle')) {
+        if (e.target.classList.contains('eliminar-detalle') || 
+            e.target.closest('.eliminar-detalle')) {
             e.target.closest('.detalle-item').remove();
-            actualizarCalculos();
-        }
-    });
-    
-    // Calcular subtotal y total cuando cambian cantidades o precios
-    detallesContainer.addEventListener('input', function(e) {
-        if (e.target.classList.contains('cantidad') || e.target.classList.contains('precio')) {
-            const item = e.target.closest('.detalle-item');
-            const cantidad = parseFloat(item.querySelector('.cantidad').value) || 0;
-            const precio = parseFloat(item.querySelector('.precio').value) || 0;
-            const subtotal = cantidad * precio;
-            item.querySelector('.subtotal').value = subtotal.toFixed(2);
             actualizarCalculos();
         }
     });
@@ -224,6 +290,35 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('iva').value = iva.toFixed(2);
         document.getElementById('total').value = total.toFixed(2);
     }
+    
+    // Validar formulario antes de enviar
+    form.addEventListener('submit', function(e) {
+        const detalles = document.querySelectorAll('.detalle-item');
+        if (detalles.length === 0) {
+            e.preventDefault();
+            alert('Debe agregar al menos un detalle a la compra');
+            return false;
+        }
+        
+        let formValido = true;
+        
+        // Validar que todos los detalles tengan información válida
+        detalles.forEach(detalle => {
+            const descripcion = detalle.querySelector('.descripcion').value.trim();
+            const cantidad = parseFloat(detalle.querySelector('.cantidad').value) || 0;
+            const precio = parseFloat(detalle.querySelector('.precio').value) || 0;
+            
+            if (descripcion === '' || cantidad < 1 || precio < 0.01) {
+                formValido = false;
+            }
+        });
+        
+        if (!formValido) {
+            e.preventDefault();
+            alert('Por favor, complete correctamente todos los campos de los detalles');
+            return false;
+        }
+    });
     
     // Agregar un detalle por defecto al cargar
     agregarBtn.click();

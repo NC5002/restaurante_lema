@@ -39,12 +39,12 @@ include '../includes/header.php';
                     <h3 class="mb-0 color-primario"><i class="bi bi-egg-fried"></i> Detalles del Ítem de Menú</h3>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 text-center mb-4">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-4 text-center mb-4 ">
                             <?php if($menu->IMAGEN): ?>
                                 <img src="../includes/img/<?= htmlspecialchars($menu->IMAGEN)?>" 
                                      alt="<?= htmlspecialchars($menu->NOMBRE) ?>" 
-                                     class="img-fluid rounded" style="max-height: 250px;">
+                                     class="rounded img-thumbnail ">
                             <?php else: ?>
                                 <div class="bg-light p-5 text-center">
                                     <i class="bi bi-image" style="font-size: 5rem;"></i>
@@ -99,29 +99,10 @@ include '../includes/header.php';
                     </div>
                 </div>
                 <div class="card-footer bg-light">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <a href="editar_menu.php?CODIGO_MENU=<?= $menu->CODIGO_MENU ?>" class="btn btn-primario me-2">
-                                <i class="bi bi-pencil"></i> Editar
-                            </a>
-                            <?php if ($menu->ESTADO == '1'): ?>
-                                <a href="eliminar_menu.php?CODIGO_MENU=<?= $menu->CODIGO_MENU ?>" 
-                                   class="btn btn-danger"
-                                   onclick="return confirm('¿Está seguro de desactivar este ítem?')">
-                                    <i class="bi bi-trash"></i> Desactivar
-                                </a>
-                            <?php else: ?>
-                                <a href="activar_menu.php?CODIGO_MENU=<?= $menu->CODIGO_MENU ?>" 
-                                   class="btn btn-success"
-                                   onclick="return confirm('¿Está seguro de activar este ítem?')">
-                                    <i class="bi bi-check-circle"></i> Activar
-                                </a>
-                            <?php endif; ?>
-                        </div>
-                        <a href="./index_menu.php" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> Volver al Listado
-                        </a>
-                    </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                
+                                <a href="./index_menu.php" class="btn btn-primario"><i class="bi bi-arrow-left"></i> Volver al Listado</a>
+
                 </div>
             </div>
         </div>

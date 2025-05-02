@@ -11,9 +11,6 @@ if (!isset($_SESSION['user_id'])){
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand color-primario" href="index.php">
-                <i class="bi bi-cup-hot-fill"></i>
-            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -25,12 +22,7 @@ if (!isset($_SESSION['user_id'])){
                             <i class="bi bi-house-door"></i> Inicio
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link color-primario " href="../categoria/index_categoria.php" >
-                            <i class="bi bi-bookmark"></i> Categorías
-                        </a>
-                        
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link color-primario" href="../menu/index_menu.php">
                             <i class="bi bi-menu-button"></i> Menú
@@ -39,11 +31,6 @@ if (!isset($_SESSION['user_id'])){
                     <li class="nav-item">
                         <a class="nav-link color-primario" href="../cliente/index_cliente.php">
                             <i class="bi bi-people"></i> Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link color-primario" href="../medida/index_medida.php">
-                            <i class="bi bi-rulers"></i> Medidas
                         </a>
                     </li>
                     <li class="nav-item">
@@ -79,11 +66,13 @@ if (!isset($_SESSION['user_id'])){
                                         <i class="bi bi-person"></i> Perfil
                                     </a>
                                 </li>
+                                <?php if ($_SESSION['user_rol'] == 1) { ?>
                                 <li>
-                                    <a class="dropdown-item color-primario" href="#">
+                                    <a class="dropdown-item color-primario" href="../dashboard_configuracion.php">
                                         <i class="bi bi-gear"></i> Configuración
                                     </a>
                                 </li>
+                                <?php } ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item color-secundario" href="../logout.php">

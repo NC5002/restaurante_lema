@@ -86,7 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <div class="container mt-5 text-center">
-<img src="../assets/img/logo.png" alt="" class="img-fluid mb-4" width="250px">
+<div class="text-center mb-4">
+        <img src="./includes/img/logo.png" alt="logo" class="img-fluid" width="200px">
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-4">
             <h1 class="text-center color-primario">

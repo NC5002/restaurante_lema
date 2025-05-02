@@ -1,102 +1,177 @@
 <?php
 class Usuario {
     private $conn;
-    private $table_name = "usuario";
+    private $table_name = "usuarios";
 
-    public $ID_USUARIO;
-    public $USUARIO;
-    public $CORREO;
-    public $CONTRASENA;
-    public $TIPO_USUARIO;
-    public $FECHA_REGISTRO;
-    public $ESTADO;
+    public $id;
+    public $nombre;
+    public $email;
+    public $cedula;
+    public $password;
+    public $rol_id;
+    public $estado;
+    public $perfil;
+    public $fecha_registro;
 
     public function __construct($db) {
         $this->conn = $db;
     }
 
+    // Crear usuario
     function crear() {
-        $query = "INSERT INTO " . $this->table_name . " 
-                  SET USUARIO=:USUARIO, CORREO=:CORREO, CONTRASENA=:CONTRASENA, 
-                      TIPO_USUARIO=:TIPO_USUARIO, FECHA_REGISTRO=CURDATE(), ESTADO=:ESTADO";
+        $query = "INSERT INTO " . $this->table_name . "
+                SET nombre=:nombre, email=:email, cedula=:cedula, 
+                password=:password, rol_id=:rol_id, estado=1, perfil=:perfil";
         
         $stmt = $this->conn->prepare($query);
         
-        $this->USUARIO = htmlspecialchars(strip_tags($this->USUARIO));
-        $this->CORREO = htmlspecialchars(strip_tags($this->CORREO));
-        $this->CONTRASENA = password_hash($this->CONTRASENA, PASSWORD_BCRYPT);
-        $this->TIPO_USUARIO = htmlspecialchars(strip_tags($this->TIPO_USUARIO));
-        $this->ESTADO = htmlspecialchars(strip_tags($this->ESTADO));
+        // Sanitizar datos
+        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->cedula = htmlspecialchars(strip_tags($this->cedula));
+        $this->rol_id = htmlspecialchars(strip_tags($this->rol_id));
+        $this->perfil = htmlspecialchars(strip_tags($this->perfil));
         
-        $stmt->bindParam(":USUARIO", $this->USUARIO);
-        $stmt->bindParam(":CORREO", $this->CORREO);
-        $stmt->bindParam(":CONTRASENA", $this->CONTRASENA);
-        $stmt->bindParam(":TIPO_USUARIO", $this->TIPO_USUARIO);
-        $stmt->bindParam(":ESTADO", $this->ESTADO);
+        // Hash de la contraseña
+        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
         
-        if ($stmt->execute()) {
+        // Bind parameters
+        $stmt->bindParam(":nombre", $this->nombre);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":cedula", $this->cedula);
+        $stmt->bindParam(":password", $this->password);
+        $stmt->bindParam(":rol_id", $this->rol_id);
+        $stmt->bindParam(":perfil", $this->perfil);
+        
+        if($stmt->execute()) {
             return true;
         }
         return false;
     }
 
+    // Leer todos los usuarios
     function leer() {
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY FECHA_REGISTRO DESC";
+        $query = "SELECT u.*, r.nombre as rol_nombre 
+                 FROM " . $this->table_name . " u
+                 LEFT JOIN roles r ON u.rol_id = r.id
+                 ORDER BY u.nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
+    // Leer un solo usuario
     function leerUno() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE ID_USUARIO = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = ? LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->ID_USUARIO);
+        $stmt->bindParam(1, $this->id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        $this->USUARIO = $row['USUARIO'];
-        $this->CORREO = $row['CORREO'];
-        $this->TIPO_USUARIO = $row['TIPO_USUARIO'];
-        $this->FECHA_REGISTRO = $row['FECHA_REGISTRO'];
-        $this->ESTADO = $row['ESTADO'];
+        if($row) {
+            $this->nombre = $row['nombre'];
+            $this->email = $row['email'];
+            $this->cedula = $row['cedula'];
+            $this->rol_id = $row['rol_id'];
+            $this->estado = $row['estado'];
+            $this->perfil = $row['perfil'];
+            $this->fecha_registro = $row['fecha_registro'];
+            return true;
+        }
+        return false;
     }
 
+    // Actualizar usuario
     function actualizar() {
-        $query = "UPDATE " . $this->table_name . " 
-                  SET USUARIO=:USUARIO, CORREO=:CORREO, TIPO_USUARIO=:TIPO_USUARIO, 
-                      ESTADO=:ESTADO 
-                  WHERE ID_USUARIO=:ID_USUARIO";
+        // Query sin password
+        $query = "UPDATE " . $this->table_name . "
+                SET nombre=:nombre, email=:email, cedula=:cedula, 
+                rol_id=:rol_id, estado=:estado, perfil=:perfil
+                WHERE id=:id";
         
         $stmt = $this->conn->prepare($query);
         
-        $this->USUARIO = htmlspecialchars(strip_tags($this->USUARIO));
-        $this->CORREO = htmlspecialchars(strip_tags($this->CORREO));
-        $this->TIPO_USUARIO = htmlspecialchars(strip_tags($this->TIPO_USUARIO));
-        $this->ESTADO = htmlspecialchars(strip_tags($this->ESTADO));
-        $this->ID_USUARIO = htmlspecialchars(strip_tags($this->ID_USUARIO));
+        // Sanitizar
+        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->cedula = htmlspecialchars(strip_tags($this->cedula));
+        $this->rol_id = htmlspecialchars(strip_tags($this->rol_id));
+        $this->estado = htmlspecialchars(strip_tags($this->estado));
+        $this->perfil = htmlspecialchars(strip_tags($this->perfil));
+        $this->id = htmlspecialchars(strip_tags($this->id));
         
-        $stmt->bindParam(":USUARIO", $this->USUARIO);
-        $stmt->bindParam(":CORREO", $this->CORREO);
-        $stmt->bindParam(":TIPO_USUARIO", $this->TIPO_USUARIO);
-        $stmt->bindParam(":ESTADO", $this->ESTADO);
-        $stmt->bindParam(":ID_USUARIO", $this->ID_USUARIO);
+        // Bind parameters
+        $stmt->bindParam(":nombre", $this->nombre);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":cedula", $this->cedula);
+        $stmt->bindParam(":rol_id", $this->rol_id);
+        $stmt->bindParam(":estado", $this->estado);
+        $stmt->bindParam(":perfil", $this->perfil);
+        $stmt->bindParam(":id", $this->id);
         
-        if ($stmt->execute()) {
+        if($stmt->execute()) {
             return true;
         }
         return false;
     }
 
-    function eliminar() {
-        $query = "DELETE FROM " . $this->table_name . " WHERE ID_USUARIO = ?";
+    // Actualizar contraseña
+    function actualizarPassword($nueva_password) {
+        $query = "UPDATE " . $this->table_name . " SET password=:password WHERE id=:id";
         $stmt = $this->conn->prepare($query);
-        $this->ID_USUARIO = htmlspecialchars(strip_tags($this->ID_USUARIO));
-        $stmt->bindParam(1, $this->ID_USUARIO);
         
-        if ($stmt->execute()) {
+        $this->password = password_hash($nueva_password, PASSWORD_BCRYPT);
+        $stmt->bindParam(":password", $this->password);
+        $stmt->bindParam(":id", $this->id);
+        
+        if($stmt->execute()) {
             return true;
         }
         return false;
+    }
+
+    // Eliminar usuario (cambiar estado)
+    function eliminar() {
+        $query = "UPDATE " . $this->table_name . " SET estado=0 WHERE id=:id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $this->id);
+        
+        if($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    // Activar usuario
+    function activar() {
+        $query = "UPDATE " . $this->table_name . " SET estado=1 WHERE id=:id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $this->id);
+        
+        if($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    // Verificar si email existe
+    function emailExiste() {
+        $query = "SELECT id FROM " . $this->table_name . " WHERE email = ? LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $stmt->bindParam(1, $this->email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    // Verificar si cédula existe
+    function cedulaExiste() {
+        $query = "SELECT id FROM " . $this->table_name . " WHERE cedula = ? LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $this->cedula = htmlspecialchars(strip_tags($this->cedula));
+        $stmt->bindParam(1, $this->cedula);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
     }
 }
 ?>
