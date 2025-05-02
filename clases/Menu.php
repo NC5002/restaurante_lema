@@ -100,15 +100,6 @@ class Menu {
         
         $stmt = $this->conn->prepare($query);
         
-        $this->NOMBRE = $this->NOMBRE;
-        $this->DESCRIPCION = $this->DESCRIPCION;
-        $this->MEDIDA = $this->MEDIDA;
-        $this->PRECIO = $this->PRECIO;
-        $this->NUMERO_CATEGORIA = $this->NUMERO_CATEGORIA;
-        $this->ESTADO = $this->ESTADO;
-        $this->IMAGEN = $this->IMAGEN;
-        $this->CODIGO_MENU = $this->CODIGO_MENU;
-        
         $stmt->bindParam(":NOMBRE", $this->NOMBRE);
         $stmt->bindParam(":DESCRIPCION", $this->DESCRIPCION);
         $stmt->bindParam(":MEDIDA", $this->MEDIDA);
@@ -127,7 +118,7 @@ class Menu {
     function eliminar() {
         $query = "UPDATE " . $this->table_name . " SET ESTADO='0' WHERE CODIGO_MENU = ?";
         $stmt = $this->conn->prepare($query);
-        $this->CODIGO_MENU = $this->CODIGO_MENU;
+
         $stmt->bindParam(1, $this->CODIGO_MENU);
         
         if($stmt->execute()) {
@@ -139,7 +130,7 @@ class Menu {
     function activar() {
         $query = "UPDATE " . $this->table_name . " SET ESTADO='1' WHERE CODIGO_MENU = ?";
         $stmt = $this->conn->prepare($query);
-        $this->CODIGO_MENU = $this->CODIGO_MENU;
+
         $stmt->bindParam(1, $this->CODIGO_MENU);
         
         if($stmt->execute()) {
