@@ -9,16 +9,16 @@ $rol = new Rol($db);
 $stmt = $rol->leer();
 
 include '../includes/head.php';
-include '../includes/header.php';
+include '../includes/header_configuracion.php';
 ?>
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-8 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="card shadow">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="bi bi-tags"></i> Gestión de Roles</h3>
-                    <a href="crear_rol.php" class="btn btn-primary">
+                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-tags"></i> Gestión de Roles</h3>
+                    <a href="crear_rol.php" class="btn btn-primario">
                         <i class="bi bi-plus-circle"></i> Nuevo Rol
                     </a>
                 </div>
@@ -39,12 +39,12 @@ include '../includes/header.php';
                                         <td><?= htmlspecialchars($row['nombre']) ?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="./editar_rol.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning">
-                                                    <i class="bi bi-pencil"></i> Editar
+                                                <a href="./editar_rol.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-primario">
+                                                    <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="./eliminar_rol.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" 
+                                                <a href="./eliminar_rol.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-terciario" 
                                                    onclick="return confirm('¿Eliminar este rol?')">
-                                                    <i class="bi bi-trash"></i> Eliminar
+                                                    <i class="bi bi-trash"></i>
                                                 </a>
                                             </div>
                                         </td>

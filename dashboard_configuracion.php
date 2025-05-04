@@ -67,10 +67,19 @@ if (!isset($_SESSION['user_id'])){
                             <i class="bi bi-rulers"></i> Medidas
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link color-primario" href="./ingresos/index_ingresos.php">
+                        <a class="nav-link color-primario" href="../rol/index_rol.php">
+                            <i class="bi bi-person"></i> Roles
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-primario" href="./control/index_contol.php">
                             <i class="bi bi-door-open"></i> Ingresos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-primario" href="./empresa/index_empresa.php">
+                        <i class="bi bi-building"></i> Empresa
                         </a>
                     </li>
                 </ul>
@@ -81,11 +90,6 @@ if (!isset($_SESSION['user_id'])){
                                 <i class="bi bi-person-circle"></i> Usuario
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item color-primario" href="#">
-                                        <i class="bi bi-person"></i> Perfil
-                                    </a>
-                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item color-secundario" href="./logout.php">

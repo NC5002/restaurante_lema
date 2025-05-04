@@ -1,7 +1,8 @@
 <?php
 include '../includes/conexion.php';
 include '../clases/Rol.php';
-
+$database = new Conexion();
+$db = $database->obtenerConexion();
 $rol = new Rol($db);
 $rol->id = isset($_GET['id']) ? $_GET['id'] : die('ID de rol no especificado');
 

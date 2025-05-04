@@ -1,7 +1,8 @@
 <?php
 include '../includes/conexion.php';
 include '../clases/Rol.php';
-
+$database = new Conexion();
+$db = $database->obtenerConexion();
 $rol = new Rol($db);
 
 if($_POST){
@@ -21,10 +22,10 @@ include '../includes/header.php';
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-6 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="card shadow">
-                <div class="card-header bg-dark text-white">
-                    <h3 class="mb-0"><i class="bi bi-tag"></i> Nuevo Rol</h3>
+                <div class="card-header bg-dark">
+                    <h3 class="mb-0 color-primario"><i class="bi bi-tag"></i> Nuevo Rol</h3>
                 </div>
                 <div class="card-body">
                     <?php if(isset($error)): ?>
@@ -37,10 +38,10 @@ include '../includes/header.php';
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primario">
                                 <i class="bi bi-save"></i> Guardar
                             </button>
-                            <a href="index_rol.php" class="btn btn-secondary">
+                            <a href="index_rol.php" class="btn btn-secundario">
                                 <i class="bi bi-arrow-left"></i> Cancelar
                             </a>
                         </div>

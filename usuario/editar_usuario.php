@@ -34,7 +34,7 @@ include '../includes/header.php';
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-8 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="card shadow">
                 <div class="card-header bg-dark">
                     <h3 class="mb-0 color-primario"><i class="bi bi-person-lines-fill"></i> Editar Usuario</h3>

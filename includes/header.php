@@ -53,6 +53,11 @@ if (!isset($_SESSION['user_id'])){
                             <i class="bi bi-receipt-cutoff"></i> Facturas
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link color-primario" href="../dashboard_configuracion.php">
+                            <i class="bi bi-gear"></i> Configuración
+                        </a>
+                    </li>
                 </ul>
                 <div class="d-flex">
                     <ul class="navbar-nav">
@@ -61,18 +66,6 @@ if (!isset($_SESSION['user_id'])){
                                 <i class="bi bi-person-circle"></i> Usuario
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item color-primario" href="#">
-                                        <i class="bi bi-person"></i> Perfil
-                                    </a>
-                                </li>
-                                <?php if ($_SESSION['user_rol'] == 1) { ?>
-                                <li>
-                                    <a class="dropdown-item color-primario" href="../dashboard_configuracion.php">
-                                        <i class="bi bi-gear"></i> Configuración
-                                    </a>
-                                </li>
-                                <?php } ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item color-secundario" href="../logout.php">

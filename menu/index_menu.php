@@ -9,7 +9,7 @@ $menu = new Menu($db);
 
 // Obtener todas las categorías para el select
 try {
-    $query_categorias = "SELECT ID_CATEGORIA, NOMBRE FROM categoria WHERE ESTADO = '1' ORDER BY NOMBRE ASC";
+    $query_categorias = "SELECT ID_CATEGORIA, NOMBRE FROM categoria WHERE ESTADO = '1' AND NOMBRE <> 'ingrediente' ORDER BY NOMBRE ASC";
     $stmt_categorias = $db->prepare($query_categorias);
     $stmt_categorias->execute();
     $categorias = $stmt_categorias->fetchAll(PDO::FETCH_ASSOC);
@@ -72,8 +72,7 @@ include '../includes/header.php';
                                     <th>Imagen</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
-                                    <th>Medida</th>
-                                    <th>Categoría</th>
+                                    <th>Categoria</th>
                                     <th>Precio</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -83,15 +82,6 @@ include '../includes/header.php';
                                 <?php if ($stmt->rowCount() > 0): ?>
                                     <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): 
                                         $nombre_categoria = $menu->obtenerNombreCategoria($row['NUMERO_CATEGORIA']);
-                                        try {                                                  
-                                            $query = "SELECT DESCRIPCION FROM medidas WHERE ID_MEDIDA = ?";
-                                            $stmt_medida = $db->prepare($query);
-                                            $stmt_medida->execute([$row['MEDIDA']]);
-                                            $medida = $stmt_medida->fetch(PDO::FETCH_ASSOC);                                                    
-                                            $descripcion_medida = htmlspecialchars($medida['DESCRIPCION'] ?? 'Desconocido');
-                                        } catch(PDOException $e) {
-                                            $descripcion_medida = 'Error';
-                                        }
                                     ?>
                                         <tr>
                                             <td>
@@ -103,7 +93,6 @@ include '../includes/header.php';
                                             </td>
                                             <td><?= htmlspecialchars($row['NOMBRE']) ?></td>
                                             <td><?= htmlspecialchars($row['DESCRIPCION']) ?></td>
-                                            <td><?= $descripcion_medida ?></td>
                                             <td><?= htmlspecialchars($nombre_categoria) ?></td>
                                             <td>$<?= number_format($row['PRECIO'], 2) ?></td>
                                             <td>
