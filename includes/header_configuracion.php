@@ -24,6 +24,21 @@ if (!isset($_SESSION['user_id'])){
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link color-primario" href="../empresa/index_empresa.php">
+                            <i class="bi bi-building"></i> Empresa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-primario" href="./ingrediente/index_ingrediente.php">
+                            <i class="bi bi-egg-fried"></i> Ingredientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-primario" href="./receta/index_receta.php">
+                            <i class="bi bi-egg-fried"></i> Recetas
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link color-primario" href="../usuario/index_usuario.php">
                             <i class="bi bi-people"></i> Usuarios
                         </a>
@@ -50,11 +65,7 @@ if (!isset($_SESSION['user_id'])){
                             <i class="bi bi-door_open"></i> Ingresos
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link color-primario" href="../empresa/index_empresa.php">
-                            <i class="bi bi-building"></i> Empresa
-                        </a>
-                    </li>
+
                 </ul>
                 <div class="d-flex">
                     <ul class="navbar-nav">
